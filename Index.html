@@ -1,1 +1,411 @@
-q
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title> إسماعيل عماد| التعليم بشكل جديد </title>
+    <!-- Font Awesome 6.4.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Tajawal, Cairo, Changa, Amiri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Changa:wght@800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* متغيرات CSS - لوحة الألوان النيو-كلاسيك الرقمية */
+        :root {
+            --royal-gold: #D4AF37;
+            --academic-purple: #4A2F6B;
+            --student-cyan: #00B4D8;
+            --deep-navy: #0B1E33;
+            --energy-orange: #FF6B35;
+            --bg-start: #F8F9FA;
+            --bg-end: #FFFFFF;
+            --glass-white: rgba(255, 255, 255, 0.7);
+            --grid-color: rgba(74, 47, 107, 0.05);
+            --text-dark: #1E293B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 30%),
+                        radial-gradient(circle at 90% 70%, rgba(0, 180, 216, 0.05) 0%, transparent 40%),
+                        linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            padding: 1.5rem;
+        }
+
+        /* خلفية شبكية (Grid Pattern) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Orbs ملونة مع blur */
+        .orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            background: rgba(212, 175, 55, 0.15);
+            top: -100px;
+            right: -100px;
+        }
+
+        .orb-2 {
+            background: rgba(0, 180, 216, 0.12);
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+        }
+
+        .orb-3 {
+            background: rgba(74, 47, 107, 0.1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+        }
+
+        /* Floating Icons في الخلفية */
+        .floating-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .floating-icon {
+            position: absolute;
+            color: var(--royal-gold);
+            opacity: 0.1;
+            font-size: 2rem;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        /* الحاوية الرئيسية - طبقة زجاجية */
+        .glass-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 60px;
+            border: 1px solid var(--royal-gold);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(212, 175, 55, 0.2);
+            padding: 2.5rem 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* شارة ذهبية بيضاوية */
+        .header-badge {
+            display: inline-block;
+            padding: 0.5rem 1.8rem;
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.1), rgba(255, 255, 255, 0.5));
+            border: 1.5px solid var(--royal-gold);
+            border-radius: 60px;
+            margin-bottom: 2rem;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            color: var(--academic-purple);
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .header-badge i {
+            color: var(--royal-gold);
+            margin-left: 0.5rem;
+        }
+
+        /* العنوان الرئيسي بتدرج ذهبي */
+        h1 {
+            font-family: 'Changa', sans-serif;
+            font-weight: 900;
+            font-size: 2.2rem;
+            line-height: 1.4;
+            margin-bottom: 1.5rem;
+            color: var(--academic-purple);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1 .gradient-text {
+            background: linear-gradient(135deg, var(--royal-gold) 0%, var(--energy-orange) 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+        }
+
+        /* النص الرئيسي - رسالة الأستاذ إسماعيل عماد */
+        .message-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.4rem;
+            line-height: 1.7;
+            color: var(--deep-navy);
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 2rem;
+            border-radius: 50px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            text-align: center;
+        }
+
+        .message-text::before {
+            content: "“";
+            font-family: 'Amiri', serif;
+            font-size: 5rem;
+            position: absolute;
+            top: -20px;
+            right: 10px;
+            color: var(--royal-gold);
+            opacity: 0.3;
+        }
+
+        .message-text::after {
+            content: "”";
+            font-family: 'Amiri', serif;
+            font-size: 5rem;
+            position: absolute;
+            bottom: -40px;
+            left: 10px;
+            color: var(--royal-gold);
+            opacity: 0.3;
+        }
+
+        /* زر الدخول - بتأثيرات متحركة */
+        .enter-button {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(145deg, var(--academic-purple), #2D1B40);
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            padding: 1.3rem 2rem;
+            border-radius: 80px;
+            text-decoration: none;
+            border: 2px solid var(--royal-gold);
+            box-shadow: 0 15px 30px -10px rgba(74, 47, 107, 0.5), 0 0 0 2px rgba(212, 175, 55, 0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+            margin-top: 0.5rem;
+        }
+
+        .enter-button i {
+            margin-right: 0.8rem;
+            color: var(--royal-gold);
+            transition: transform 0.3s ease;
+        }
+
+        .enter-button:hover {
+            transform: scale(1.02) translateY(-3px);
+            box-shadow: 0 25px 40px -12px var(--academic-purple), 0 0 0 3px var(--royal-gold);
+            background: linear-gradient(145deg, #3A2353, var(--academic-purple));
+        }
+
+        .enter-button:hover i {
+            transform: translateX(-5px);
+        }
+
+        .enter-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .enter-button:hover::before {
+            left: 100%;
+        }
+
+        /* تحسين للهواتف الصغيرة */
+        @media (max-width: 380px) {
+            .glass-container {
+                padding: 1.8rem 1.2rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .message-text {
+                font-size: 1.2rem;
+                padding: 1.5rem;
+            }
+            
+            .enter-button {
+                font-size: 1.5rem;
+                padding: 1.1rem;
+            }
+        }
+
+        /* تأثير ظهور تدريجي */
+        .glass-container {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* دوران ثلاثي الأبعاد خفيف مع حركة الماوس */
+        .hover-3d {
+            transition: transform 0.2s ease;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+    </style>
+</head>
+<body>
+    <!-- Orbs ملونة -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    
+    <!-- أيقونات عائمة في الخلفية -->
+    <div class="floating-icons">
+        <i class="fas fa-flask floating-icon" style="top: 15%; left: 5%; animation-duration: 12s;"></i>
+        <i class="fas fa-rocket floating-icon" style="top: 70%; right: 3%; animation-duration: 10s; font-size: 2.5rem;"></i>
+        <i class="fas fa-atom floating-icon" style="top: 30%; left: 85%; animation-duration: 14s;"></i>
+        <i class="fas fa-microscope floating-icon" style="top: 80%; right: 80%; animation-duration: 9s;"></i>
+        <i class="fas fa-code floating-icon" style="top: 45%; right: 15%; animation-duration: 11s; color: var(--student-cyan);"></i>
+        <i class="fas fa-graduation-cap floating-icon" style="top: 20%; right: 70%; animation-duration: 13s;"></i>
+    </div>
+
+    <!-- الحاوية الزجاجية الرئيسية -->
+    <div class="glass-container hover-3d" id="glassCard">
+        <!-- شارة ذهبية -->
+        <div class="header-badge">
+            <i class="fas fa-crown"></i> اتعلم بشكل جديد
+        </div>
+
+        <!-- العنوان مع تدرج لوني -->
+        <h1>
+            <span class="gradient-text">تجربة تعليمية</span><br>
+            <span style="font-size: 1.8rem;">من الجيل القادم</span>
+        </h1>
+
+        <!-- الرسالة كاملة كما هي - بدون أي إضافات -->
+        <div class="message-text">
+            مرحباً بك في النظام التعليمي المبني بواسطة الاستاذ المهندس اسماعيل عماد المتخصص في الفيزياء و الكيمياء و علوم الفضاء و هندسة البرمجيات ، نعدك بتجربة تعليمية لا تنسي
+        </div>
+
+        <!-- زر الدخول فقط - لا شيء غيره -->
+        <a href="index2.html" class="enter-button">
+            <i class="fas fa-arrow-left"></i> دخول
+        </a>
+    </div>
+
+    <!-- سكريبت التأثير ثلاثي الأبعاد عند حركة الماوس -->
+    <script>
+        (function() {
+            const card = document.getElementById('glassCard');
+            if (!card) return;
+
+            // تأثير الـ 3D على البطاقة الرئيسية
+            document.addEventListener('mousemove', function(e) {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                card.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+
+            // إعادة التعيين عند مغادرة الماوس للنافذة
+            document.addEventListener('mouseleave', function() {
+                card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+            });
+
+            // للهواتف: تعطيل التأثير
+            if (window.matchMedia("(max-width: 768px)").matches) {
+                card.style.transform = 'none';
+                card.classList.remove('hover-3d');
+            }
+        })();
+    </script>
+
+    <!-- سكريبت إضافي لتأكيد عدم تغيير النص -->
+    <script>
+        (function() {
+            // التأكد من أن النص يبقى كما هو
+            const messageDiv = document.querySelector('.message-text');
+            if (messageDiv) {
+                const originalText = "مرحباً بك في النظام التعليمي المبني بواسطة الاستاذ المهندس اسماعيل عماد المتخصص في الفيزياء و الكيمياء و علوم الفضاء و هندسة البرمجيات ، نعدك بتجربة تعليمية لا تنسي";
+                
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'characterData' || mutation.type === 'childList') {
+                            if (messageDiv.textContent !== originalText) {
+                                messageDiv.textContent = originalText;
+                            }
+                        }
+                    });
+                });
+                
+                observer.observe(messageDiv, { 
+                    childList: true, 
+                    characterData: true, 
+                    subtree: true 
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
