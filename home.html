@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>الرئيسية | إسماعيل عماد</title>
+    <!-- Font Awesome 6.4.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Changa:wght@800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* متغيرات CSS - لوحة الألوان النيو-كلاسيك الرقمية */
+        :root {
+            --royal-gold: #D4AF37;
+            --academic-purple: #4A2F6B;
+            --student-cyan: #00B4D8;
+            --deep-navy: #0B1E33;
+            --energy-orange: #FF6B35;
+            --bg-start: #F8F9FA;
+            --bg-end: #FFFFFF;
+            --glass-white: rgba(255, 255, 255, 0.7);
+            --grid-color: rgba(74, 47, 107, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 30%),
+                        radial-gradient(circle at 90% 70%, rgba(0, 180, 216, 0.05) 0%, transparent 40%),
+                        linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            padding: 1rem;
+        }
+
+        /* خلفية شبكية */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Orbs ملونة */
+        .orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            background: rgba(212, 175, 55, 0.15);
+            top: -100px;
+            right: -100px;
+        }
+
+        .orb-2 {
+            background: rgba(0, 180, 216, 0.12);
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+        }
+
+        .orb-3 {
+            background: rgba(74, 47, 107, 0.1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+        }
+
+        /* أيقونات عائمة */
+        .floating-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .floating-icon {
+            position: absolute;
+            color: var(--royal-gold);
+            opacity: 0.1;
+            font-size: 2rem;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        /* الحاوية الرئيسية */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* الهيدر - بدون كتابة أكاديمية */
+        .glass-header {
+            background: transparent;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        /* بطاقة الطالب - أقل عرضاً */
+        .student-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 50px;
+            border: 1px solid var(--royal-gold);
+            padding: 0.6rem 1.5rem 0.6rem 0.6rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.8s ease;
+            max-width: fit-content;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--academic-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--royal-gold);
+            font-size: 1.2rem;
+            border: 2px solid var(--royal-gold);
+        }
+
+        .student-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .student-name {
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--deep-navy);
+        }
+
+        .student-grade {
+            font-family: 'Tajawal', sans-serif;
+            color: var(--academic-purple);
+            font-size: 0.8rem;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 0.1rem 0.8rem;
+            border-radius: 40px;
+            display: inline-block;
+            margin-top: 0.2rem;
+        }
+
+        /* رسالة الترحيب الجديدة */
+        .welcome-message {
+            font-family: 'Amiri', serif;
+            font-size: 1.3rem;
+            color: var(--deep-navy);
+            margin: 1.5rem 0 2rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.1), rgba(74, 47, 107, 0.05));
+            border-radius: 60px;
+            border: 1px solid var(--royal-gold);
+            animation: fadeIn 1s ease;
+            text-align: center;
+            box-shadow: 0 10px 30px -15px var(--royal-gold);
+        }
+
+        .welcome-message i {
+            color: var(--royal-gold);
+            margin: 0 0.5rem;
+        }
+
+        .student-name-in-message {
+            color: var(--academic-purple);
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* شبكة الأزرار */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.2rem;
+            margin: 2.5rem 0;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* زر الخدمة */
+        .service-btn {
+            position: relative;
+            background: var(--glass-white);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid transparent;
+            border-radius: 40px;
+            padding: 1.3rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            text-decoration: none;
+            color: var(--deep-navy);
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .service-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, var(--royal-gold), var(--academic-purple));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+
+        .service-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--royal-gold);
+            box-shadow: 0 20px 35px -10px var(--academic-purple);
+        }
+
+        .service-btn:hover::before {
+            opacity: 0.1;
+        }
+
+        .service-btn i {
+            font-size: 2rem;
+            color: var(--royal-gold);
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-btn span {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .service-btn .arrow-icon {
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.4s ease;
+        }
+
+        .service-btn:hover .arrow-icon {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .service-btn:hover i:not(.arrow-icon) {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* ألوان مميزة لكل زر */
+        .service-btn:nth-child(1) { border-right: 5px solid var(--royal-gold); }
+        .service-btn:nth-child(2) { border-right: 5px solid var(--student-cyan); }
+        .service-btn:nth-child(3) { border-right: 5px solid var(--academic-purple); }
+        .service-btn:nth-child(4) { border-right: 5px solid var(--energy-orange); }
+        .service-btn:nth-child(5) { border-right: 5px solid #9b59b6; }
+        .service-btn:nth-child(6) { border-right: 5px solid #e74c3c; }
+
+        /* الفوتر الجديد */
+        .footer {
+            margin-top: 4rem;
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 60px 60px 30px 30px;
+            border: 1px solid var(--royal-gold);
+            padding: 2rem;
+            box-shadow: 0 -10px 30px -15px rgba(0, 0, 0, 0.2);
+        }
+
+        .hashtag {
+            font-family: 'Changa', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            text-align: center;
+            color: var(--academic-purple);
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .hashtag span {
+            background: linear-gradient(135deg, var(--royal-gold), var(--energy-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .eng-name {
+            text-align: center;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--deep-navy);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px dashed var(--royal-gold);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            border: 1px solid var(--student-cyan);
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--royal-gold);
+            box-shadow: 0 10px 20px -10px var(--student-cyan);
+        }
+
+        .contact-item i {
+            font-size: 1.3rem;
+            color: var(--royal-gold);
+        }
+
+        .contact-item a {
+            text-decoration: none;
+            color: var(--deep-navy);
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 500;
+        }
+
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--academic-purple);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 60px;
+            text-decoration: none;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid var(--royal-gold);
+        }
+
+        .social-link:hover {
+            transform: scale(1.05);
+            background: var(--deep-navy);
+        }
+
+        .social-link i {
+            color: var(--royal-gold);
+        }
+
+        .bio {
+            text-align: center;
+            font-family: 'Amiri', serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--deep-navy);
+            padding: 1.5rem;
+            background: rgba(212, 175, 55, 0.05);
+            border-radius: 50px;
+            border-right: 5px solid var(--royal-gold);
+        }
+
+        .bio strong {
+            color: var(--academic-purple);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* تحميل */
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--royal-gold);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* تحسين للهواتف */
+        @media (max-width: 600px) {
+            .student-card {
+                padding: 0.4rem 1rem 0.4rem 0.4rem;
+            }
+
+            .student-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .student-name {
+                font-size: 0.9rem;
+            }
+
+            .student-grade {
+                font-size: 0.7rem;
+            }
+
+            .welcome-message {
+                font-size: 1.1rem;
+                padding: 0.8rem 1rem;
+            }
+
+            .buttons-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .contact-item {
+                justify-content: center;
+            }
+
+            .social-links {
+                flex-direction: column;
+            }
+
+            .social-link {
+                justify-content: center;
+            }
+
+            .hashtag {
+                font-size: 1.5rem;
+            }
+
+            .eng-name {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* تأثير الظهور المتتابع للأزرار */
+        .service-btn {
+            animation: fadeInScale 0.5s ease forwards;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .service-btn:nth-child(1) { animation-delay: 0.1s; }
+        .service-btn:nth-child(2) { animation-delay: 0.2s; }
+        .service-btn:nth-child(3) { animation-delay: 0.3s; }
+        .service-btn:nth-child(4) { animation-delay: 0.4s; }
+        .service-btn:nth-child(5) { animation-delay: 0.5s; }
+        .service-btn:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeInScale {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Orbs ملونة -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- أيقونات عائمة -->
+    <div class="floating-icons">
+        <i class="fas fa-flask floating-icon" style="top: 15%; left: 5%;"></i>
+        <i class="fas fa-rocket floating-icon" style="top: 80%; right: 8%; color: var(--student-cyan);"></i>
+        <i class="fas fa-atom floating-icon" style="top: 30%; left: 90%;"></i>
+        <i class="fas fa-brain floating-icon" style="top: 70%; left: 15%;"></i>
+        <i class="fas fa-microscope floating-icon" style="top: 40%; right: 20%;"></i>
+        <i class="fas fa-code floating-icon" style="top: 85%; left: 40%;"></i>
+    </div>
+
+    <div class="container">
+        <!-- الهيدر - فقط بطاقة الطالب -->
+        <div class="glass-header">
+            <div class="student-card" id="studentCard">
+                <div class="student-avatar">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="student-info">
+                    <span class="student-name" id="studentNameDisplay">جاري التحميل...</span>
+                    <span class="student-grade" id="studentGradeDisplay">...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- رسالة الترحيب الجديدة -->
+        <div class="welcome-message" id="welcomeMessage">
+            <i class="fas fa-star"></i>
+            ازيك يا <span class="student-name-in-message" id="studentNameInMessage">...</span>، خليك فاكر ان لكل مجتهد نصيب
+            <i class="fas fa-star"></i>
+        </div>
+
+        <!-- شبكة الأزرار الستة -->
+        <div class="buttons-grid">
+            <!-- زر المنصة التعليمية -->
+            <a href="manasa.html" class="service-btn">
+                <i class="fas fa-tv"></i>
+                <span>المنصة التعليمية</span>
+                <i class="fas fa-arrow-left arrow-icon"></i>
+            </a>
+
+            <!-- زر تنظيم يوم الطالب -->
+            <a href="student.day.html" class="service-btn">
+                <i class="fas fa-calendar-check"></i>
+                <span>تنظيم يوم الطالب</span>
+                <i class="fas fa-arrow-left arrow-icon"></i>
+            </a>
+
+            <!-- زر نظام المتابعة -->
+            <a href="sys.html" class="service-btn">
+                <i class="fas fa-chart-line"></i>
+                <span>نظام المتابعة</span>
+                <i class="fas fa-arrow-left arrow-icon"></i>
+            </a>
+
+            <!-- زر المسابقات الطلابية -->
+            <a href="challenge.html" class="service-btn">
+                <i class="fas fa-trophy"></i>
+                <span>المسابقات الطلابية</span>
+                <i class="fas fa-arrow-left arrow-icon"></i>
+            </a>
+
+            <!-- زر امتحان الكتروني -->
+            <a href="exam.html" class="service-btn">
+                <i class="fas fa-pen-alt"></i>
+                <span>امتحان الكتروني</span>
+                <i class="fas fa-arrow-left arrow-icon"></i>
+            </a>
+
+            <!-- زر بث مباشر -->
+            <a href="live.html" class="service-btn">
+                <i class="fas fa-video"></i>
+                <span>بث مباشر</span>
+                <i class="fas fa-arrow-left arrow-icon"></i>
+            </a>
+        </div>
+
+        <!-- الفوتر الجديد -->
+        <footer class="footer">
+            <div class="hashtag">
+                #<span>اتعلم-بشكل-جديد</span>
+            </div>
+            
+            <div class="eng-name">
+                ENG.MR Ismail
+            </div>
+
+            <!-- معلومات التواصل -->
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fab fa-whatsapp"></i>
+                    <a href="https://wa.me/201122104596">01122104596</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <a href="tel:+201202326992">01202326992</a>
+                </div>
+            </div>
+
+            <!-- روابط التواصل الاجتماعي -->
+            <div class="social-links">
+                <a href="https://www.facebook.com/share/1E8wZdQKf7/?mibextid=wwXIfr" target="_blank" class="social-link">
+                    <i class="fab fa-facebook-f"></i> فيسبوك
+                </a>
+                <a href="https://www.instagram.com/islamemad803?igsh=MXQ4MzB4NnZjM3JxYw%3D%3D&utm_source=qr" target="_blank" class="social-link">
+                    <i class="fab fa-instagram"></i> انستجرام
+                </a>
+            </div>
+
+            <!-- نبذة مختصرة -->
+            <div class="bio">
+                <i class="fas fa-quote-right" style="color: var(--royal-gold); margin-left: 0.5rem;"></i>
+                <strong>المهندس الاستاذ اسماعيل عماد</strong> استاذ مادة العلوم و المتخصص في الفيزياء و الكيمياء و علوم الفضاء و البرمجيات، مؤسس شركة edutech Egypt للسيستم
+                <i class="fas fa-quote-left" style="color: var(--royal-gold); margin-right: 0.5rem;"></i>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBPgtF_GqT95QkMwwoJMGiZWFPjHFdA_N0",
+            authDomain: "manassa-oloom.firebaseapp.com",
+            databaseURL: "https://manassa-oloom-default-rtdb.firebaseio.com",
+            projectId: "manassa-oloom",
+            storageBucket: "manassa-oloom.firebasestorage.app",
+            messagingSenderId: "475047988456",
+            appId: "1:475047988456:web:ab25a9b01b5c77483b0d5d",
+            measurementId: "G-F0N011WQB9"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // عناصر DOM
+        const studentNameDisplay = document.getElementById('studentNameDisplay');
+        const studentGradeDisplay = document.getElementById('studentGradeDisplay');
+        const studentNameInMessage = document.getElementById('studentNameInMessage');
+
+        // دالة لعرض بيانات الطالب
+        async function displayStudentData() {
+            // نحاول الحصول من localStorage
+            const savedData = localStorage.getItem('studentData');
+            
+            if (savedData) {
+                try {
+                    const studentData = JSON.parse(savedData);
+                    
+                    // تحديث العرض
+                    studentNameDisplay.textContent = studentData.name || 'طالب';
+                    studentGradeDisplay.textContent = studentData.grade || 'غير محدد';
+                    studentNameInMessage.textContent = studentData.name || 'طالب';
+                    
+                } catch (error) {
+                    console.error('خطأ في قراءة البيانات المخزنة:', error);
+                    // إذا حدث خطأ، نروح لصفحة التسجيل
+                    window.location.href = 'index2.html';
+                }
+            } else {
+                // إذا مافيش بيانات مخزنة، نروح لصفحة التسجيل
+                window.location.href = 'index2.html';
+            }
+        }
+
+        // تشغيل عند تحميل الصفحة
+        window.addEventListener('load', displayStudentData);
+
+        // إضافة تأثيرات بصرية إضافية
+        document.querySelectorAll('.service-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+
+    <!-- سكريبت إضافي لتأثيرات ثلاثية الأبعاد -->
+    <script>
+        (function() {
+            // تأثير حركة الماوس على البطاقة
+            const studentCard = document.querySelector('.student-card');
+            if (studentCard) {
+                document.addEventListener('mousemove', (e) => {
+                    const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+                    const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+                    studentCard.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+                });
+
+                document.addEventListener('mouseleave', () => {
+                    studentCard.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

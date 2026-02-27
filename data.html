@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>إدارة الطلاب | أكاديمية إسماعيل عماد</title>
+    <!-- Font Awesome 6.4.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Changa:wght@800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* متغيرات CSS */
+        :root {
+            --royal-gold: #D4AF37;
+            --academic-purple: #4A2F6B;
+            --student-cyan: #00B4D8;
+            --deep-navy: #0B1E33;
+            --energy-orange: #FF6B35;
+            --bg-start: #F8F9FA;
+            --bg-end: #FFFFFF;
+            --glass-white: rgba(255, 255, 255, 0.7);
+            --grid-color: rgba(74, 47, 107, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 30%),
+                        radial-gradient(circle at 90% 70%, rgba(0, 180, 216, 0.05) 0%, transparent 40%),
+                        linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            padding: 1rem;
+        }
+
+        /* خلفية شبكية */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Orbs ملونة */
+        .orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            background: rgba(212, 175, 55, 0.15);
+            top: -100px;
+            right: -100px;
+        }
+
+        .orb-2 {
+            background: rgba(0, 180, 216, 0.12);
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+        }
+
+        .orb-3 {
+            background: rgba(74, 47, 107, 0.1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+        }
+
+        /* الحاوية الرئيسية */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* الهيدر */
+        .header {
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 60px;
+            border: 1px solid var(--royal-gold);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-badge {
+            display: inline-block;
+            padding: 0.5rem 1.8rem;
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.1), rgba(255, 255, 255, 0.5));
+            border: 1.5px solid var(--royal-gold);
+            border-radius: 60px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            color: var(--academic-purple);
+            font-size: 1rem;
+        }
+
+        .header-badge i {
+            color: var(--royal-gold);
+            margin-left: 0.5rem;
+        }
+
+        .stats {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            border: 1px solid var(--royal-gold);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .stat-number {
+            color: var(--academic-purple);
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-left: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--deep-navy);
+        }
+
+        /* عنوان الصفحة */
+        h1 {
+            font-family: 'Changa', sans-serif;
+            font-weight: 900;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--academic-purple);
+            text-align: center;
+        }
+
+        h1 .gradient-text {
+            background: linear-gradient(135deg, var(--royal-gold) 0%, var(--energy-orange) 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* أزرار التحكم */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 1rem 2rem;
+            background: var(--glass-white);
+            backdrop-filter: blur(5px);
+            border: 2px solid var(--royal-gold);
+            border-radius: 60px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            color: var(--deep-navy);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .control-btn i {
+            color: var(--royal-gold);
+        }
+
+        .control-btn:hover {
+            background: var(--academic-purple);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px -10px var(--academic-purple);
+        }
+
+        .control-btn:hover i {
+            color: var(--royal-gold);
+        }
+
+        .control-btn.active {
+            background: var(--academic-purple);
+            color: white;
+        }
+
+        /* البحث */
+        .search-box {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto 2rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1.2rem 2rem 1.2rem 3.5rem;
+            background: var(--glass-white);
+            backdrop-filter: blur(5px);
+            border: 2px solid var(--royal-gold);
+            border-radius: 60px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--royal-gold);
+            font-size: 1.2rem;
+        }
+
+        /* إحصائيات المراحل */
+        .grade-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .grade-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--student-cyan);
+            border-radius: 40px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .grade-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--royal-gold);
+            box-shadow: 0 15px 30px -10px var(--student-cyan);
+        }
+
+        .grade-name {
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            color: var(--deep-navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .grade-count {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--academic-purple);
+            font-family: 'Changa', sans-serif;
+        }
+
+        /* جدول الطلاب */
+        .students-table {
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 60px;
+            border: 1px solid var(--royal-gold);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1.5fr 2fr 1.5fr 1.5fr 1.2fr;
+            background: linear-gradient(145deg, var(--academic-purple), #2D1B40);
+            color: white;
+            padding: 1.2rem;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            gap: 0.5rem;
+        }
+
+        .table-header span {
+            padding: 0 0.5rem;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1.5fr 2fr 1.5fr 1.5fr 1.2fr;
+            padding: 1.2rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .table-row:hover {
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .student-name {
+            font-weight: 700;
+            color: var(--academic-purple);
+        }
+
+        .student-grade {
+            background: rgba(0, 180, 216, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            border: 1px solid var(--student-cyan);
+        }
+
+        .student-phone {
+            direction: ltr;
+            font-family: monospace;
+        }
+
+        .student-group {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            border: 1px solid var(--royal-gold);
+        }
+
+        .student-date {
+            font-size: 0.85rem;
+            color: var(--deep-navy);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status-yes {
+            background: rgba(0, 180, 216, 0.2);
+            color: var(--student-cyan);
+            border: 1px solid var(--student-cyan);
+        }
+
+        .status-no {
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--energy-orange);
+            border: 1px solid var(--energy-orange);
+        }
+
+        /* رسالة عدم وجود بيانات */
+        .no-data {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--glass-white);
+            border-radius: 60px;
+            border: 1px solid var(--royal-gold);
+        }
+
+        .no-data i {
+            font-size: 4rem;
+            color: var(--royal-gold);
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .no-data p {
+            font-size: 1.3rem;
+            color: var(--deep-navy);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* زر التحميل */
+        .load-more {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .load-more-btn {
+            padding: 1rem 3rem;
+            background: var(--academic-purple);
+            color: white;
+            border: 2px solid var(--royal-gold);
+            border-radius: 60px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .load-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px -10px var(--academic-purple);
+        }
+
+        .load-more-btn i {
+            color: var(--royal-gold);
+        }
+
+        /* التحميل */
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--royal-gold);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* تذييل */
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--deep-navy);
+            opacity: 0.6;
+        }
+
+        /* تحسين للهواتف */
+        @media (max-width: 768px) {
+            .table-header {
+                display: none;
+            }
+
+            .table-row {
+                display: block;
+                padding: 1.5rem;
+                margin-bottom: 1rem;
+                background: rgba(255, 255, 255, 0.5);
+                border-radius: 40px;
+                border: 1px solid var(--royal-gold);
+            }
+
+            .table-row > div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0.8rem;
+                padding: 0.3rem 0;
+                border-bottom: 1px dashed rgba(212, 175, 55, 0.2);
+            }
+
+            .table-row > div:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+            }
+
+            .table-row > div::before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: var(--academic-purple);
+                font-family: 'Cairo', sans-serif;
+            }
+
+            .student-phone {
+                direction: rtl;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stats {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="container">
+        <!-- الهيدر -->
+        <div class="header">
+            <div class="header-badge">
+                <i class="fas fa-users-cog"></i> لوحة التحكم - إدارة الطلاب
+            </div>
+            <div class="stats" id="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalStudents">0</span>
+                    <span class="stat-label">إجمالي الطلاب</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalWithLessons">0</span>
+                    <span class="stat-label">معايا في الدروس</span>
+                </div>
+            </div>
+        </div>
+
+        <h1>
+            <span class="gradient-text">قاعدة بيانات الطلاب</span>
+        </h1>
+
+        <!-- أزرار التحكم -->
+        <div class="controls">
+            <button class="control-btn active" onclick="filterStudents('all')">
+                <i class="fas fa-users"></i> الكل
+            </button>
+            <button class="control-btn" onclick="filterStudents('withLessons')">
+                <i class="fas fa-check-circle"></i> معايا في الدروس
+            </button>
+            <button class="control-btn" onclick="filterStudents('withoutLessons')">
+                <i class="fas fa-times-circle"></i> مش معايا
+            </button>
+            <button class="control-btn" onclick="refreshData()">
+                <i class="fas fa-sync-alt"></i> تحديث
+            </button>
+        </div>
+
+        <!-- البحث -->
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="ابحث بالاسم أو رقم الهاتف..." onkeyup="searchStudents()">
+            <i class="fas fa-search"></i>
+        </div>
+
+        <!-- إحصائيات المراحل -->
+        <div class="grade-stats" id="gradeStats"></div>
+
+        <!-- جدول الطلاب -->
+        <div class="students-table" id="studentsTable">
+            <div class="table-header">
+                <span>#</span>
+                <span>الاسم</span>
+                <span>المرحلة</span>
+                <span>رقم الهاتف</span>
+                <span>في الدروس</span>
+                <span>المجموعة</span>
+                <span>تاريخ التسجيل</span>
+            </div>
+            <div id="studentsList"></div>
+        </div>
+
+        <!-- زر تحميل المزيد -->
+        <div class="load-more" id="loadMore">
+            <button class="load-more-btn" onclick="loadMoreStudents()">
+                <i class="fas fa-chevron-down"></i> تحميل المزيد
+            </button>
+        </div>
+
+        <!-- تذييل -->
+        <div class="footer">
+            <i class="fas fa-crown" style="color: var(--royal-gold);"></i> أكاديمية إسماعيل عماد - جميع الحقوق محفوظة
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getFirestore, collection, query, orderBy, limit, startAfter, getDocs, where } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBPgtF_GqT95QkMwwoJMGiZWFPjHFdA_N0",
+            authDomain: "manassa-oloom.firebaseapp.com",
+            databaseURL: "https://manassa-oloom-default-rtdb.firebaseio.com",
+            projectId: "manassa-oloom",
+            storageBucket: "manassa-oloom.firebasestorage.app",
+            messagingSenderId: "475047988456",
+            appId: "1:475047988456:web:ab25a9b01b5c77483b0d5d",
+            measurementId: "G-F0N011WQB9"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // متغيرات عامة
+        let lastVisible = null;
+        let currentFilter = 'all';
+        let searchTerm = '';
+        const pageSize = 20;
+
+        // تحميل البيانات عند بدء الصفحة
+        window.addEventListener('load', () => {
+            loadStudents();
+            loadStatistics();
+        });
+
+        // دالة تحميل الطلاب
+        window.loadStudents = async function(reset = true) {
+            if (reset) {
+                lastVisible = null;
+                document.getElementById('studentsList').innerHTML = '';
+            }
+
+            const studentsList = document.getElementById('studentsList');
+            const loader = '<div class="loader-container"><div class="loader"></div></div>';
+            
+            if (reset) {
+                studentsList.innerHTML = loader;
+            }
+
+            try {
+                let q;
+                
+                if (currentFilter === 'withLessons') {
+                    q = query(collection(db, "students"), where("hasLessons", "==", "yes"), orderBy("timestamp", "desc"), limit(pageSize));
+                } else if (currentFilter === 'withoutLessons') {
+                    q = query(collection(db, "students"), where("hasLessons", "==", "no"), orderBy("timestamp", "desc"), limit(pageSize));
+                } else {
+                    q = query(collection(db, "students"), orderBy("timestamp", "desc"), limit(pageSize));
+                }
+
+                if (lastVisible && !reset) {
+                    q = query(q, startAfter(lastVisible));
+                }
+
+                const querySnapshot = await getDocs(q);
+                
+                if (reset) {
+                    studentsList.innerHTML = '';
+                }
+
+                if (querySnapshot.empty) {
+                    if (reset) {
+                        studentsList.innerHTML = `
+                            <div class="no-data">
+                                <i class="fas fa-database"></i>
+                                <p>لا يوجد طلاب مسجلين حتى الآن</p>
+                            </div>
+                        `;
+                    }
+                    document.getElementById('loadMore').style.display = 'none';
+                    return;
+                }
+
+                lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+                
+                let index = reset ? 1 : studentsList.children.length + 1;
+                
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const row = createStudentRow(data, index++);
+                    studentsList.insertAdjacentHTML('beforeend', row);
+                });
+
+                document.getElementById('loadMore').style.display = querySnapshot.docs.length < pageSize ? 'none' : 'block';
+
+            } catch (error) {
+                console.error("خطأ في تحميل البيانات:", error);
+                studentsList.innerHTML = `
+                    <div class="no-data">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--energy-orange);"></i>
+                        <p>حدث خطأ في تحميل البيانات</p>
+                    </div>
+                `;
+            }
+        };
+
+        // دالة إنشاء صف الطالب
+        function createStudentRow(data, index) {
+            const date = data.timestamp ? new Date(data.timestamp).toLocaleDateString('ar-EG') : 'غير محدد';
+            const group = data.group || '—';
+            const hasLessons = data.hasLessons === 'yes' ? 'نعم' : 'لا';
+            const statusClass = data.hasLessons === 'yes' ? 'status-yes' : 'status-no';
+            
+            // تكيف مع الشاشات الصغيرة
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile) {
+                return `
+                    <div class="table-row">
+                        <div data-label="الاسم"><span class="student-name">${data.name || ''}</span></div>
+                        <div data-label="المرحلة"><span class="student-grade">${data.grade || ''}</span></div>
+                        <div data-label="رقم الهاتف"><span class="student-phone">${data.phone || ''}</span></div>
+                        <div data-label="في الدروس"><span class="status-badge ${statusClass}">${hasLessons}</span></div>
+                        <div data-label="المجموعة"><span class="student-group">${group}</span></div>
+                        <div data-label="تاريخ التسجيل"><span class="student-date">${date}</span></div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="table-row">
+                        <div>${index}</div>
+                        <div class="student-name">${data.name || ''}</div>
+                        <div><span class="student-grade">${data.grade || ''}</span></div>
+                        <div class="student-phone">${data.phone || ''}</div>
+                        <div><span class="status-badge ${statusClass}">${hasLessons}</span></div>
+                        <div><span class="student-group">${group}</span></div>
+                        <div class="student-date">${date}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // دالة تحميل المزيد
+        window.loadMoreStudents = function() {
+            loadStudents(false);
+        };
+
+        // دالة تصفية الطلاب
+        window.filterStudents = function(filter) {
+            currentFilter = filter;
+            
+            // تحديث حالة الأزرار
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadStudents(true);
+        };
+
+        // دالة البحث
+        window.searchStudents = function() {
+            searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            filterStudentsBySearch();
+        };
+
+        async function filterStudentsBySearch() {
+            if (!searchTerm) {
+                loadStudents(true);
+                return;
+            }
+
+            const studentsList = document.getElementById('studentsList');
+            studentsList.innerHTML = '<div class="loader-container"><div class="loader"></div></div>';
+
+            try {
+                const q = query(collection(db, "students"), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                const filtered = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.name?.toLowerCase().includes(searchTerm) || data.phone?.includes(searchTerm)) {
+                        filtered.push(data);
+                    }
+                });
+
+                if (filtered.length === 0) {
+                    studentsList.innerHTML = `
+                        <div class="no-data">
+                            <i class="fas fa-search"></i>
+                            <p>لا توجد نتائج للبحث</p>
+                        </div>
+                    `;
+                    document.getElementById('loadMore').style.display = 'none';
+                    return;
+                }
+
+                studentsList.innerHTML = '';
+                filtered.forEach((data, index) => {
+                    const row = createStudentRow(data, index + 1);
+                    studentsList.insertAdjacentHTML('beforeend', row);
+                });
+
+                document.getElementById('loadMore').style.display = 'none';
+
+            } catch (error) {
+                console.error("خطأ في البحث:", error);
+            }
+        }
+
+        // دالة تحميل الإحصائيات
+        async function loadStatistics() {
+            try {
+                const q = query(collection(db, "students"));
+                const querySnapshot = await getDocs(q);
+                
+                let total = 0;
+                let withLessons = 0;
+                const gradeCount = {};
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    total++;
+                    
+                    if (data.hasLessons === 'yes') {
+                        withLessons++;
+                    }
+                    
+                    if (data.grade) {
+                        gradeCount[data.grade] = (gradeCount[data.grade] || 0) + 1;
+                    }
+                });
+
+                // تحديث الإحصائيات
+                document.getElementById('totalStudents').textContent = total;
+                document.getElementById('totalWithLessons').textContent = withLessons;
+
+                // عرض إحصائيات المراحل
+                const gradeStats = document.getElementById('gradeStats');
+                gradeStats.innerHTML = '';
+                
+                Object.entries(gradeCount).forEach(([grade, count]) => {
+                    gradeStats.innerHTML += `
+                        <div class="grade-card">
+                            <div class="grade-name">${grade}</div>
+                            <div class="grade-count">${count}</div>
+                        </div>
+                    `;
+                });
+
+            } catch (error) {
+                console.error("خطأ في تحميل الإحصائيات:", error);
+            }
+        }
+
+        // دالة تحديث البيانات
+        window.refreshData = function() {
+            loadStudents(true);
+            loadStatistics();
+        };
+    </script>
+</body>
+</html>

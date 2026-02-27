@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>الامتحانات الإلكترونية | أكاديمية إسماعيل عماد</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts - المزيج المطلوب -->
+    <link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;600;700;800&family=Tajawal:wght@300;400;500;700;900&family=Lemonada:wght@400;600&family=Reem+Kufi+Fun:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f8f5f0; /* Off-White للخلفية */
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Tajawal', sans-serif; /* الأساسي للنصوص */
+            padding: 30px 20px;
+        }
+
+        /* ===== الخلفية الكونية الثابتة (بدون حركة) ===== */
+        .cosmic-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(74, 47, 107, 0.3) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 180, 216, 0.25) 0%, transparent 70%);
+            top: 30%;
+            left: 40%;
+        }
+
+        .orb-4 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, rgba(74, 47, 107, 0.2) 50%, transparent 80%);
+            bottom: 20%;
+            right: 15%;
+        }
+
+        /* ===== الحاوية الرئيسية ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ===== البطاقة الرئيسية (بدون تأثير 3D) ===== */
+        .announcement-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 80px 80px 80px 20px; /* مزيج بين الدائري والحاد */
+            padding: 70px 60px;
+            box-shadow: 0 40px 80px -20px rgba(74, 47, 107, 0.4),
+                        0 0 0 2px rgba(212, 175, 55, 0.2) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* خط ذهبي علوي */
+        .gold-strip {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #D4AF37, #00B4D8, #4A2F6B);
+        }
+
+        /* ===== العنوان الرئيسي ===== */
+        .main-title {
+            font-family: 'Changa', sans-serif; /* للعناوين الضخمة */
+            font-size: 64px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+        .title-gold {
+            color: #D4AF37;
+            text-shadow: 2px 2px 0 rgba(212, 175, 55, 0.2);
+        }
+
+        .title-purple {
+            color: #4A2F6B;
+        }
+
+        .title-cyan {
+            color: #00B4D8;
+        }
+
+        .title-decoration {
+            font-size: 48px;
+            margin: 0 10px;
+        }
+
+        /* ===== النص الأساسي ===== */
+        .message-text {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 28px;
+            font-weight: 500;
+            color: #1a2a3a;
+            text-align: center;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 25px 35px;
+            border-radius: 60px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .highlight {
+            font-family: 'Lemonada', cursive; /* لمسة جمالية ناعمة */
+            font-weight: 600;
+            font-size: 32px;
+            color: #D4AF37;
+            display: inline-block;
+            margin: 0 8px;
+        }
+
+        .highlight-purple {
+            color: #4A2F6B;
+            font-weight: 700;
+        }
+
+        .highlight-cyan {
+            color: #00B4D8;
+            font-weight: 700;
+        }
+
+        /* ===== بطاقة الإشعار ===== */
+        .notification-box {
+            background: rgba(74, 47, 107, 0.05);
+            border: 2px solid #4A2F6B;
+            border-radius: 50px 50px 50px 15px; /* مزيج حواف */
+            padding: 30px 40px;
+            margin: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notification-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, rgba(212, 175, 55, 0.1), rgba(0, 180, 216, 0.1), transparent);
+        }
+
+        .notification-icon {
+            font-size: 70px;
+            color: #D4AF37;
+            filter: drop-shadow(0 5px 15px rgba(212, 175, 55, 0.4));
+            position: relative;
+            z-index: 2;
+        }
+
+        .notification-text {
+            font-family: 'Reem Kufi Fun', sans-serif; /* طابع فني حديث */
+            font-size: 26px;
+            font-weight: 600;
+            color: #1a2a3a;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        .notification-text .small {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 20px;
+            color: #4A2F6B;
+            margin-top: 10px;
+        }
+
+        /* ===== شبكة المميزات (بدون تأثير حركي) ===== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 40px 40px 40px 15px; /* مزيج حواف */
+            padding: 30px 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px -10px rgba(74, 47, 107, 0.1);
+        }
+
+        .feature-card:hover {
+            border-color: #D4AF37;
+            box-shadow: 0 15px 35px -12px rgba(212, 175, 55, 0.3);
+        }
+
+        .feature-card i {
+            font-size: 55px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card:nth-child(1) i { color: #D4AF37; }
+        .feature-card:nth-child(2) i { color: #4A2F6B; }
+        .feature-card:nth-child(3) i { color: #00B4D8; }
+
+        .feature-card h3 {
+            font-family: 'Changa', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a2a3a;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* ===== زر العودة (بدون تأثير حركي مفرط) ===== */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: linear-gradient(135deg, #D4AF37, #4A2F6B);
+            color: white;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            padding: 18px 45px;
+            border-radius: 50px 50px 50px 10px; /* مزيج حواف */
+            text-decoration: none;
+            margin-top: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px -15px rgba(74, 47, 107, 0.4);
+            width: fit-content;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #4A2F6B, #D4AF37);
+            box-shadow: 0 15px 30px -12px #4A2F6B;
+        }
+
+        .back-btn i {
+            font-size: 28px;
+        }
+
+        /* ===== الإحصائيات الصغيرة ===== */
+        .stats-banner {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 35px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Changa', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            color: #D4AF37;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 16px;
+            color: #4A2F6B;
+            font-weight: 600;
+        }
+
+        /* ===== تصميم متجاوب ممتاز للهاتف ===== */
+        @media (max-width: 992px) {
+            .main-title {
+                font-size: 52px;
+            }
+            
+            .message-text {
+                font-size: 24px;
+                padding: 20px 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .announcement-card {
+                padding: 40px 25px;
+                border-radius: 50px 50px 50px 15px;
+            }
+
+            .main-title {
+                font-size: 40px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .title-decoration {
+                font-size: 36px;
+            }
+
+            .message-text {
+                font-size: 20px;
+                padding: 20px;
+            }
+
+            .highlight {
+                font-size: 24px;
+                display: block;
+                margin: 10px 0;
+            }
+
+            .notification-box {
+                padding: 25px 20px;
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .notification-text {
+                font-size: 20px;
+            }
+
+            .notification-text .small {
+                font-size: 18px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .feature-card {
+                padding: 25px 20px;
+            }
+
+            .back-btn {
+                font-size: 20px;
+                padding: 15px 30px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-banner {
+                gap: 20px;
+            }
+
+            .stat-number {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 32px;
+            }
+
+            .message-text {
+                font-size: 18px;
+                padding: 15px;
+            }
+
+            .notification-text {
+                font-size: 18px;
+            }
+
+            .feature-card h3 {
+                font-size: 20px;
+            }
+        }
+
+        /* ===== دعم Safe Area ===== */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(20px, env(safe-area-inset-left));
+                padding-right: max(20px, env(safe-area-inset-right));
+                padding-top: max(20px, env(safe-area-inset-top));
+                padding-bottom: max(20px, env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- الخلفية الكونية بالأجرام اللونية (ثابتة) -->
+    <div class="cosmic-background">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div class="gradient-orb orb-4"></div>
+    </div>
+
+    <div class="container">
+        <!-- البطاقة الرئيسية (بدون تأثيرات حركية) -->
+        <div class="announcement-card">
+            <div class="gold-strip"></div>
+            
+            <!-- العنوان الرئيسي بمزيج الألوان -->
+            <h1 class="main-title">
+                <span class="title-gold">الامتحانات</span>
+                <span class="title-decoration">
+                    <i class="fas fa-sparkle"></i>
+                </span>
+                <span class="title-purple">الإلكترونية</span>
+                <span class="title-decoration">
+                    <i class="fas fa-sparkle"></i>
+                </span>
+                <span class="title-cyan">النخبة</span>
+            </h1>
+
+            <!-- النص الأساسي -->
+            <div class="message-text">
+                <span class="highlight">الامتحانات الإلكترونية</span> 
+                هي ابتكار جديد 
+                <i class="fas fa-lightbulb" style="color: #D4AF37;"></i>
+                <br>
+                تم إضافته 
+                <span class="highlight-purple">للمدرسة</span> 
+                و 
+                <span class="highlight-cyan">للمنصة</span>
+                <br>
+                كفكرة مفيدة لاختبار الطالب في البيت
+                <i class="fas fa-home" style="color: #00B4D8; margin-right: 5px;"></i>
+            </div>
+
+            <!-- بطاقة الإشعار الرئيسية -->
+            <div class="notification-box">
+                <i class="fas fa-bell notification-icon"></i>
+                <div class="notification-text">
+                    إن شاء الله وقتما يتوفر امتحان إلكتروني 
+                    <br>
+                    خاص بالدروس هيتم إبلاغ الطالب
+                    <div class="small">
+                        <i class="fas fa-star" style="color: #D4AF37;"></i>
+                        إن شاء الله علي الجروب
+                        <i class="fas fa-star" style="color: #D4AF37;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- إحصائيات سريعة -->
+            <div class="stats-banner">
+                <div class="stat-item">
+                    <div class="stat-number">+50</div>
+                    <div class="stat-label">امتحان قريباً</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">صفوف دراسية</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">متابعة مستمرة</div>
+                </div>
+            </div>
+
+            <!-- شبكة المميزات -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-laptop-file"></i>
+                    <h3>امتحانات تفاعلية</h3>
+                    <p>تجربة امتحانية متطورة وممتعة</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>في أي وقت</h3>
+                    <p>امتحن لما تكون مستعد</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>نتيجة فورية</h3>
+                    <p>اعرف نتيجتك حالاً</p>
+                </div>
+            </div>
+
+            <!-- زر العودة للصفحة الرئيسية (home.html) -->
+            <a href="home.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>العودة للصفحة الرئيسية</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

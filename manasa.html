@@ -1,0 +1,661 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>تحقق - المنصة التعليمية | إسماعيل عماد</title>
+    <!-- Font Awesome 6.4.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Changa:wght@800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --royal-gold: #D4AF37;
+            --academic-purple: #4A2F6B;
+            --student-cyan: #00B4D8;
+            --deep-navy: #0B1E33;
+            --energy-orange: #FF6B35;
+            --bg-start: #F8F9FA;
+            --bg-end: #FFFFFF;
+            --glass-white: rgba(255, 255, 255, 0.7);
+            --grid-color: rgba(74, 47, 107, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 30%),
+                        radial-gradient(circle at 90% 70%, rgba(0, 180, 216, 0.05) 0%, transparent 40%),
+                        linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            padding: 1rem;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            background: rgba(212, 175, 55, 0.15);
+            top: -100px;
+            right: -100px;
+        }
+
+        .orb-2 {
+            background: rgba(0, 180, 216, 0.12);
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+        }
+
+        .orb-3 {
+            background: rgba(74, 47, 107, 0.1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .glass-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 60px;
+            border: 1px solid var(--royal-gold);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 2.5rem 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-badge {
+            display: inline-block;
+            padding: 0.5rem 1.8rem;
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.1), rgba(255, 255, 255, 0.5));
+            border: 1.5px solid var(--royal-gold);
+            border-radius: 60px;
+            margin-bottom: 2rem;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            color: var(--academic-purple);
+        }
+
+        .header-badge i {
+            color: var(--royal-gold);
+            margin-left: 0.5rem;
+        }
+
+        h1 {
+            font-family: 'Changa', sans-serif;
+            font-weight: 900;
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--academic-purple);
+        }
+
+        h1 .gradient-text {
+            background: linear-gradient(135deg, var(--royal-gold) 0%, var(--energy-orange) 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ===== التعديل 1: بطاقة الخدمات (جديدة) ===== */
+        .services-card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 40px;
+            padding: 1.5rem 1.2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--student-cyan);
+            box-shadow: 0 5px 15px rgba(0,180,216,0.1);
+        }
+
+        .services-title {
+            font-family: 'Cairo', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--academic-purple);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px dashed var(--royal-gold);
+            padding-bottom: 0.5rem;
+        }
+
+        .services-title i {
+            color: var(--student-cyan);
+            font-size: 1.5rem;
+        }
+
+        .services-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            font-size: 1rem;
+            line-height: 1.4;
+            color: var(--deep-navy);
+        }
+
+        .service-item i {
+            color: var(--royal-gold);
+            font-size: 1.1rem;
+            margin-top: 0.2rem;
+            min-width: 1.4rem;
+            text-align: center;
+        }
+
+        .service-item strong {
+            color: var(--academic-purple);
+            font-weight: 700;
+        }
+
+        .schedule-badge {
+            background: rgba(0,180,216,0.15);
+            border-radius: 30px;
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            color: var(--deep-navy);
+            border: 1px solid var(--student-cyan);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ===== التعديل 2: بطاقة الترحيب مُصغرة ===== */
+        .welcome-mini-card {
+            background: rgba(212, 175, 55, 0.08);
+            border-radius: 30px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px dashed var(--royal-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.95rem;
+            color: var(--deep-navy);
+        }
+
+        .welcome-mini-card i {
+            color: var(--royal-gold);
+            font-size: 1.5rem;
+        }
+
+        .welcome-mini-card .highlight-mini {
+            background: linear-gradient(180deg, transparent 60%, rgba(212,175,55,0.3) 40%);
+            font-weight: 700;
+            color: var(--academic-purple);
+        }
+
+        /* باقي العناصر كما هي مع بعض التباعد الجديد */
+        .code-hint {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            color: var(--deep-navy);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border: 1px dashed var(--royal-gold);
+        }
+
+        .input-group {
+            margin: 2rem 0;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1.3rem 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--royal-gold);
+            border-radius: 60px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1.5rem;
+            text-align: center;
+            letter-spacing: 8px;
+            direction: ltr;
+            outline: none;
+        }
+
+        .input-field:focus {
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 1.3rem;
+            background: linear-gradient(145deg, var(--academic-purple), #2D1B40);
+            color: white;
+            border: 2px solid var(--royal-gold);
+            border-radius: 60px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .verify-btn i {
+            color: var(--royal-gold);
+        }
+
+        .verify-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 35px -10px var(--academic-purple);
+        }
+
+        .subscribe-btn {
+            width: 100%;
+            padding: 1.3rem;
+            background: var(--energy-orange);
+            color: white;
+            border: 2px solid var(--royal-gold);
+            border-radius: 60px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            text-decoration: none;
+        }
+
+        .subscribe-btn:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        .error-message {
+            color: var(--energy-orange);
+            font-family: 'Cairo', sans-serif;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 40px;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--royal-gold);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--deep-navy);
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        /* تأثيرات إضافية */
+        .floating-icon {
+            position: absolute;
+            color: var(--royal-gold);
+            opacity: 0.1;
+            font-size: 2rem;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- عناصر زخرفية -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    
+    <i class="fas fa-tv floating-icon" style="top: 10%; left: 5%;"></i>
+    <i class="fas fa-laptop floating-icon" style="bottom: 15%; right: 8%; color: var(--student-cyan);"></i>
+
+    <div class="container">
+        <div class="glass-card">
+            <!-- شارة العلوية -->
+            <div class="header-badge">
+                <i class="fas fa-tv"></i> المنصة التعليمية
+            </div>
+
+            <!-- العنوان -->
+            <h1>
+                <span class="gradient-text">كود الدخول</span>
+            </h1>
+
+            <!-- بطاقة الخدمات (التعديل الأول: تفاصيل المنصة بالضبط) -->
+            <div class="services-card">
+                <div class="services-title">
+                    <i class="fas fa-film"></i> محتوى المنصة الأسبوعي
+                </div>
+                <div class="services-list">
+                    <div class="service-item">
+                        <i class="fas fa-play-circle"></i>
+                        <span><strong>ڤيديوهات شرح مفصلة</strong> – تغطي المنهج بشكل وافٍ كل أسبوع.</span>
+                    </div>
+                    <div class="service-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span><strong>فيديوهات حل أسئلة</strong> – نماذج وتمارين شاملة على الدروس.</span>
+                    </div>
+                    <div class="service-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>محتوى منظم حسب <strong>جدول ثابت أسبوعياً</strong> يتاح لك بمجرد التحقق.</span>
+                    </div>
+                </div>
+                <div class="schedule-badge">
+                    <i class="fas fa-clock"></i> كل خميس: شرح جديد · كل سبت: حل أسئلة
+                </div>
+            </div>
+
+            <!-- بطاقة الترحيب المصغرة (التعديل الثاني: أصغر حجماً وكتابة أقل) -->
+            <div class="welcome-mini-card">
+                <i class="fas fa-star"></i>
+                <span>معانا في الدروس؟ أنت <span class="highlight-mini">محظوظ</span>! النظام مجاني لمشتركينا. استخدم الكود الموجود على ملزمتك.</span>
+            </div>
+
+            <!-- تلميح الكود -->
+            <div class="code-hint">
+                <i class="fas fa-key" style="color: var(--royal-gold); margin-left: 0.5rem;"></i>
+                الكود مكون من 6 أرقام - موجود على غلاف المذكرة
+            </div>
+
+            <!-- حقل إدخال الكود -->
+            <div class="input-group">
+                <input type="text" class="input-field" id="codeInput" placeholder="• • • • • •" maxlength="6" inputmode="numeric" pattern="[0-9]*">
+            </div>
+
+            <!-- زر التحقق -->
+            <button class="verify-btn" onclick="verifyCode()">
+                <i class="fas fa-check-circle"></i> تحقق ودخول
+                <span class="loader" id="loader" style="display: none;"></span>
+            </button>
+
+            <!-- زر الاشتراك (لغير المشتركين) -->
+            <a href="payment.html" class="subscribe-btn" id="subscribeBtn">
+                <i class="fas fa-credit-card"></i> لو مش معانا في الدروس اشترك من هنا في الخدمة ديه
+            </a>
+
+            <!-- رسائل الخطأ -->
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorText"></span>
+            </div>
+
+            <!-- توقيع -->
+            <div class="footer-note">
+                <i class="fas fa-crown" style="color: var(--royal-gold);"></i>
+                الأستاذ إسماعيل عماد - متخصص في الفيزياء والكيمياء وعلوم الفضاء
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (نفس الكود بالكامل دون تغيير) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBPgtF_GqT95QkMwwoJMGiZWFPjHFdA_N0",
+            authDomain: "manassa-oloom.firebaseapp.com",
+            databaseURL: "https://manassa-oloom-default-rtdb.firebaseio.com",
+            projectId: "manassa-oloom",
+            storageBucket: "manassa-oloom.firebasestorage.app",
+            messagingSenderId: "475047988456",
+            appId: "1:475047988456:web:ab25a9b01b5c77483b0d5d",
+            measurementId: "G-F0N011WQB9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // الصفحة المستهدفة بعد التحقق
+        const nextPage = 'manasa1.html';
+
+        // دالة لجلب معرف فريد للجهاز
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = 'device_' + Math.random().toString(36).substring(2, 15) + 
+                          Math.random().toString(36).substring(2, 15);
+                localStorage.setItem('deviceId', deviceId);
+            }
+            return deviceId;
+        }
+
+        // التحقق من وجود دخول سابق
+        async function checkPreviousAccess() {
+            const deviceId = getDeviceId();
+            const savedCode = localStorage.getItem('verified_manasa');
+            
+            if (savedCode) {
+                // تحقق أن الكود لسه ساري على هذا الجهاز
+                const q = query(
+                    collection(db, "verified_devices"),
+                    where("code", "==", savedCode),
+                    where("deviceId", "==", deviceId),
+                    where("page", "==", "manasa")
+                );
+                
+                const snapshot = await getDocs(q);
+                if (!snapshot.empty) {
+                    // دخول تلقائي
+                    window.location.href = nextPage;
+                }
+            }
+        }
+
+        // تشغيل التحقق عند تحميل الصفحة
+        checkPreviousAccess();
+
+        // دالة التحقق الرئيسية
+        window.verifyCode = async function() {
+            const code = document.getElementById('codeInput').value.trim();
+            const loader = document.getElementById('loader');
+            const verifyBtn = document.querySelector('.verify-btn');
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+
+            if (!code || code.length !== 6) {
+                showError('يرجى إدخال كود صحيح مكون من 6 أرقام');
+                return;
+            }
+
+            // إظهار التحميل
+            loader.style.display = 'inline-block';
+            verifyBtn.style.opacity = '0.7';
+            verifyBtn.disabled = true;
+
+            try {
+                // 1. التحقق من وجود الكود وغير مستخدم
+                const codesRef = collection(db, "access_codes");
+                const codeQuery = query(
+                    codesRef,
+                    where("code", "==", code),
+                    where("isUsed", "==", false)
+                );
+                
+                const codeSnapshot = await getDocs(codeQuery);
+                
+                if (codeSnapshot.empty) {
+                    showError('الكود غير صحيح أو تم استخدامه من قبل');
+                    resetButton();
+                    return;
+                }
+
+                const codeDoc = codeSnapshot.docs[0];
+                const deviceId = getDeviceId();
+
+                // 2. التحقق أن الكود لم يستخدم على جهاز آخر
+                const deviceQuery = query(
+                    collection(db, "verified_devices"),
+                    where("code", "==", code)
+                );
+                
+                const deviceSnapshot = await getDocs(deviceQuery);
+                
+                if (!deviceSnapshot.empty) {
+                    showError('هذا الكود مستخدم بالفعل على جهاز آخر');
+                    resetButton();
+                    return;
+                }
+
+                // 3. كل شيء تمام - تسجيل الدخول
+                
+                // تحديث حالة الكود الأصلي
+                await updateDoc(doc(db, "access_codes", codeDoc.id), {
+                    isUsed: true,
+                    usedBy: deviceId,
+                    usedAt: new Date().toISOString(),
+                    usedOnPage: "manasa"
+                });
+
+                // تسجيل الجهاز
+                await addDoc(collection(db, "verified_devices"), {
+                    code: code,
+                    deviceId: deviceId,
+                    page: "manasa",
+                    verifiedAt: new Date().toISOString(),
+                    userAgent: navigator.userAgent
+                });
+
+                // حفظ محلياً
+                localStorage.setItem('verified_manasa', code);
+                localStorage.setItem('deviceId', deviceId);
+
+                // رسالة نجاح وتوجيه
+                showSuccess();
+
+            } catch (error) {
+                console.error("خطأ في التحقق:", error);
+                showError('حدث خطأ في النظام. حاول مرة أخرى');
+                resetButton();
+            }
+        };
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorDiv.style.display = 'flex';
+            
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 4000);
+        }
+
+        function resetButton() {
+            const loader = document.getElementById('loader');
+            const verifyBtn = document.querySelector('.verify-btn');
+            loader.style.display = 'none';
+            verifyBtn.style.opacity = '1';
+            verifyBtn.disabled = false;
+        }
+
+        function showSuccess() {
+            const verifyBtn = document.querySelector('.verify-btn');
+            verifyBtn.innerHTML = '<i class="fas fa-check"></i> تم التحقق! جاري الدخول...';
+            verifyBtn.style.background = 'linear-gradient(145deg, #10b981, #059669)';
+            
+            setTimeout(() => {
+                window.location.href = nextPage;
+            }, 1500);
+        }
+
+        // السماح بالأرقام فقط
+        document.getElementById('codeInput').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        // الدخول بضغط Enter
+        document.getElementById('codeInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                verifyCode();
+            }
+        });
+
+    </script>
+</body>
+</html>

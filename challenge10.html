@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>أكاديمية إسماعيل عماد | الصف الأول الإعدادي - الملحمة الكبرى</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- GSAP المتقدم -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        /* ===== المتغيرات المحسنة ===== */
+        :root {
+            --primary-gold: #D4AF37;
+            --primary-gold-light: #f5d97b;
+            --primary-gold-dark: #b88c1f;
+            --primary-dark: #0B1E33;
+            --primary-darker: #030812;
+            --error-red: #ff4444;
+            --success-green: #28a745;
+            --energy-blue: #00d4ff;
+            --magic-purple: #9d4edd;
+            --fire-orange: #ff6b35;
+            --ice-cyan: #4ecdc4;
+            --transition-smooth: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(ellipse at top, #1a2f44, var(--primary-darker));
+            position: relative;
+            overflow-x: hidden;
+            color: white;
+        }
+
+        /* ===== خلفية كونية متحركة (أخف قليلاً) ===== */
+        .cosmic-bg {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 80px 120px, #D4AF37, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 50px, #00d4ff, rgba(0,0,0,0)),
+                radial-gradient(4px 4px at 250px 180px, #9d4edd, rgba(0,0,0,0));
+            background-size: 500px 500px;
+            opacity: 0.4; /* أقل من السابق */
+            animation: cosmicSpin 240s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cosmicSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== سحب متحركة (أخف) ===== */
+        .nebula {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 60%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(157, 78, 221, 0.1) 0%, transparent 50%);
+            filter: blur(40px); /* أقل */
+            animation: nebulaFloat 25s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes nebulaFloat {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.2; }
+            100% { transform: scale(1.2) rotate(5deg); opacity: 0.4; }
+        }
+
+        /* ===== شريط الحالة المحسن (أصغر قليلاً) ===== */
+        .epic-status-bar {
+            background: rgba(11, 30, 51, 0.85);
+            backdrop-filter: blur(20px) saturate(200%);
+            border-bottom: 2px solid var(--primary-gold);
+            padding: 10px 20px; /* أقل */
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            box-shadow: 0 5px 20px -10px rgba(212, 175, 55, 0.3);
+        }
+
+        .player-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .player-avatar {
+            width: 45px; /* أصغر */
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--magic-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--primary-dark);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            animation: avatarPulse 2s infinite;
+        }
+
+        @keyframes avatarPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
+            50% { box-shadow: 0 0 35px rgba(157, 78, 221, 0.6); }
+        }
+
+        .player-name {
+            font-size: 20px; /* أصغر */
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, var(--primary-gold-light), var(--energy-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .player-title {
+            font-size: 13px; /* أصغر */
+            color: rgba(255,255,255,0.6);
+            margin-top: -3px;
+        }
+
+        /* ===== قلوب متطورة (أصغر) ===== */
+        .hearts-epic {
+            display: flex;
+            gap: 6px;
+            background: rgba(0,0,0,0.2);
+            padding: 5px 15px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,68,68,0.2);
+        }
+
+        .heart-epic {
+            font-size: 24px; /* أصغر */
+            filter: drop-shadow(0 0 8px #ff4444);
+            transition: all 0.3s ease;
+        }
+
+        .heart-epic.lost {
+            opacity: 0.2;
+            filter: none;
+        }
+
+        /* ===== النقاط الذهبية (أصغر) ===== */
+        .points-epic {
+            background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(157,78,221,0.1));
+            border: 2px solid var(--primary-gold);
+            border-radius: 40px;
+            padding: 5px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .points-epic::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--magic-purple));
+            filter: blur(30px);
+            animation: pointsGlow 3s infinite;
+        }
+
+        .points-epic i {
+            font-size: 22px; /* أصغر */
+            color: var(--primary-gold);
+            animation: pointsSpin 12s linear infinite;
+        }
+
+        .points-epic span {
+            font-size: 26px; /* أصغر */
+            font-weight: 900;
+            color: var(--primary-gold);
+            text-shadow: 0 0 15px rgba(212,175,55,0.5);
+        }
+
+        /* ===== شاشة التحميل الملحمية (أخف) ===== */
+        .loading-epic {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-darker);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loading-epic.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .portal-loader {
+            width: 180px; /* أصغر */
+            height: 180px;
+            position: relative;
+            perspective: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .portal-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent; /* أنحف */
+            border-top-color: var(--primary-gold);
+            border-bottom-color: var(--magic-purple);
+            border-left-color: var(--energy-blue);
+            border-right-color: var(--fire-orange);
+            border-radius: 50%;
+            animation: portalSpin 3s linear infinite;
+        }
+
+        .portal-ring:nth-child(2) {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            border-top-color: var(--magic-purple);
+            border-bottom-color: var(--energy-blue);
+            border-left-color: var(--fire-orange);
+            border-right-color: var(--primary-gold);
+            animation-direction: reverse;
+            animation-duration: 2s;
+        }
+
+        .portal-ring:nth-child(3) {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            border-top-color: var(--energy-blue);
+            border-bottom-color: var(--fire-orange);
+            border-left-color: var(--primary-gold);
+            border-right-color: var(--magic-purple);
+            animation-duration: 1.5s;
+        }
+
+        @keyframes portalSpin {
+            0% { transform: rotateY(0deg) rotateX(0deg); }
+            100% { transform: rotateY(360deg) rotateX(360deg); }
+        }
+
+        .loading-tip-epic {
+            background: rgba(212,175,55,0.1);
+            border: 1px solid var(--primary-gold); /* أنحف */
+            border-radius: 50px;
+            padding: 15px 35px; /* أقل */
+            font-size: 20px; /* أصغر */
+            color: white;
+            box-shadow: 0 0 30px rgba(212,175,55,0.2);
+        }
+
+        /* ===== خريطة المراحل (مسافات أقل) ===== */
+        .world-map {
+            max-width: 1300px;
+            margin: 15px auto; /* أقل */
+            padding: 10px; /* أقل */
+            position: relative;
+            z-index: 10;
+        }
+
+        .map-title {
+            text-align: center;
+            margin-bottom: 25px; /* أقل */
+            position: relative;
+        }
+
+        .map-title h1 {
+            font-size: clamp(35px, 8vw, 55px); /* أصغر */
+            font-weight: 900;
+            background: linear-gradient(135deg, 
+                var(--primary-gold), 
+                var(--energy-blue), 
+                var(--magic-purple), 
+                var(--fire-orange), 
+                var(--ice-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .map-subtitle {
+            color: rgba(255,255,255,0.7);
+            font-size: 16px; /* أصغر */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .magic-line {
+            height: 2px; /* أنحف */
+            width: 80px; /* أقصر */
+            background: linear-gradient(90deg, transparent, var(--primary-gold), var(--energy-blue), transparent);
+        }
+
+        /* ===== بطاقات المراحل (أصغر وأنظف) ===== */
+        .stages-epic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* أصغر */
+            gap: 20px; /* أقل */
+            padding: 10px;
+            perspective: 2000px;
+        }
+
+        .stage-epic-card {
+            background: rgba(11, 30, 51, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.15); /* أنحف */
+            border-radius: 35px; /* أقل */
+            padding: 20px 15px; /* أقل */
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.4);
+        }
+
+        .stage-epic-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary-gold);
+            box-shadow: 0 20px 30px -10px rgba(212,175,55,0.4);
+        }
+
+        .stage-epic-card.unlocked {
+            border-color: var(--primary-gold);
+            background: rgba(212, 175, 55, 0.08);
+        }
+
+        .stage-epic-card.completed {
+            border-color: var(--success-green);
+            background: rgba(40, 167, 69, 0.08);
+        }
+
+        .stage-epic-card.completed::after {
+            content: '✓✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 18px;
+            color: var(--success-green);
+        }
+
+        .stage-icon-epic {
+            font-size: 50px; /* أصغر */
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 15px currentColor);
+            animation: iconFloat 3s infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .stage-number-epic {
+            font-size: 22px; /* أصغر */
+            font-weight: 900;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .stage-badge {
+            display: inline-block;
+            padding: 4px 15px; /* أقل */
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px; /* أصغر */
+            margin: 5px 0;
+        }
+
+        .stage-badge.unlocked {
+            background: rgba(212,175,55,0.15);
+            color: var(--primary-gold);
+            border: 1px solid var(--primary-gold);
+        }
+
+        .stage-badge.locked {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+        }
+
+        .stage-badge.completed {
+            background: rgba(40,167,69,0.15);
+            color: var(--success-green);
+            border: 1px solid var(--success-green);
+        }
+
+        .stage-badge.loading {
+            background: rgba(212,175,55,0.1);
+            color: var(--primary-gold);
+            border: 1px dashed var(--primary-gold);
+        }
+
+        .stage-questions-count {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(212,175,55,0.1);
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 11px;
+            color: var(--primary-gold);
+        }
+
+        /* ===== ساحة المعركة الملحمية (أنظف) ===== */
+        .battle-epic-arena {
+            max-width: 1000px;
+            margin: 10px auto;
+            padding: 10px;
+            position: relative;
+            z-index: 50;
+            display: none;
+        }
+
+        .battle-epic-arena.active {
+            display: block;
+        }
+
+        .battle-header-epic {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .battle-info-epic {
+            background: rgba(11,30,51,0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--primary-gold);
+            border-radius: 40px;
+            padding: 8px 20px; /* أقل */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px; /* أصغر */
+        }
+
+        .battle-scene-epic {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 20px 20px; /* أقل */
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px; /* أقل */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(212,175,55,0.2);
+        }
+
+        .enemy-epic {
+            width: 200px; /* أصغر */
+            height: 200px;
+            margin-bottom: 15px;
+        }
+
+        .enemy-epic i {
+            font-size: 150px; /* أصغر */
+            filter: drop-shadow(0 0 30px currentColor);
+        }
+
+        .battle-question-epic {
+            font-size: clamp(18px, 4vw, 24px); /* أصغر */
+            font-weight: 700;
+            text-align: center;
+            margin: 10px 0;
+            color: white;
+            max-width: 800px;
+            background: rgba(0,0,0,0.4);
+            padding: 15px 25px; /* أقل */
+            border-radius: 40px;
+            border: 1px solid rgba(212,175,55,0.2);
+            line-height: 1.5;
+        }
+
+        /* ===== خيارات الإجابة (أنظف) ===== */
+        .options-epic-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px; /* أقل */
+            margin: 15px 0;
+        }
+
+        @media (max-width: 700px) {
+            .options-epic-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-epic-btn {
+            background: rgba(11,30,51,0.9);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(212,175,55,0.15); /* أنحف */
+            border-radius: 35px; /* أقل */
+            padding: 15px 20px; /* أقل */
+            color: white;
+            font-size: 18px; /* أصغر */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-height: 70px; /* أقل */
+        }
+
+        .option-epic-btn:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+        }
+
+        .option-prefix-epic {
+            background: linear-gradient(135deg, var(--primary-gold), var(--magic-purple));
+            color: var(--primary-dark);
+            width: 45px; /* أصغر */
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 20px; /* أصغر */
+            box-shadow: 0 0 20px rgba(212,175,55,0.4);
+            flex-shrink: 0;
+        }
+
+        /* ===== شاشة النتيجة (أنظف) ===== */
+        .result-epic-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 8, 18, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .result-epic-card {
+            background: linear-gradient(135deg, #0B1E33, #1a2f44);
+            border: 3px solid var(--primary-gold); /* أنحف */
+            border-radius: 60px; /* أقل */
+            padding: 30px 30px; /* أقل */
+            max-width: 550px; /* أقل */
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -20px rgba(212,175,55,0.4);
+        }
+
+        .result-epic-icon {
+            font-size: 80px; /* أصغر */
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+        }
+
+        .result-epic-title {
+            font-size: 40px; /* أصغر */
+            font-weight: 900;
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+        }
+
+        .result-epic-stats {
+            background: rgba(0,0,0,0.2);
+            border-radius: 40px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(212,175,55,0.1);
+        }
+
+        .result-epic-stat {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 18px;
+            padding: 8px;
+            border-bottom: 1px solid rgba(212,175,55,0.1);
+        }
+
+        .result-epic-stat span:last-child {
+            color: var(--primary-gold);
+            font-weight: 900;
+            font-size: 22px;
+        }
+
+        .result-epic-message {
+            font-size: 18px;
+            line-height: 1.5;
+            color: white;
+            margin: 15px 0;
+            background: rgba(212,175,55,0.1);
+            padding: 15px;
+            border-radius: 40px;
+            border: 1px solid rgba(212,175,55,0.1);
+        }
+
+        /* ===== أزرار محسنة (أصغر) ===== */
+        .btn-epic-gold {
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-light));
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 40px;
+            padding: 12px 30px;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 20px -8px rgba(212,175,55,0.5);
+        }
+
+        .btn-epic-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--primary-gold);
+            border-radius: 40px;
+            padding: 10px 25px;
+            font-weight: 600;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* ===== نظام الإنجازات (أصغر) ===== */
+        .achievement-popup {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: rgba(11,30,51,0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary-gold);
+            border-radius: 40px;
+            padding: 12px 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10000;
+            animation: achievementSlide 0.5s ease;
+            max-width: 350px;
+            font-size: 14px;
+        }
+
+        .achievement-popup i {
+            font-size: 30px;
+            color: var(--primary-gold);
+        }
+
+        /* ===== تحذير الخروج ===== */
+        .exit-warning-epic {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(220,53,69,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 15px 25px;
+            color: white;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+            border: 1px solid #ff8a8a;
+            max-width: 500px;
+            width: 90%;
+            font-size: 14px;
+        }
+
+        .exit-warning-epic button {
+            background: white;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            margin-right: auto;
+        }
+
+        /* ===== تحسينات الهاتف ===== */
+        @media (max-width: 480px) {
+            .battle-question-epic {
+                font-size: 16px;
+                padding: 12px 15px;
+            }
+            
+            .option-epic-btn {
+                padding: 12px;
+                font-size: 16px;
+                min-height: 60px;
+            }
+            
+            .option-prefix-epic {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+            
+            .result-epic-title {
+                font-size: 30px;
+            }
+            
+            .btn-epic-gold, .btn-epic-outline {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== خلفية كونية ===== -->
+<div class="cosmic-bg"></div>
+<div class="nebula"></div>
+
+<!-- ===== شاشة التحميل الملحمية ===== -->
+<div id="loadingEpic" class="loading-epic">
+    <div class="portal-loader">
+        <div class="portal-ring"></div>
+        <div class="portal-ring"></div>
+        <div class="portal-ring"></div>
+    </div>
+    <div class="loading-tip-epic" id="epicLoadingTip">
+        <i class="fas fa-lightbulb"></i>
+        <span>جاري فتح بوابة المغامرة...</span>
+        <i class="fas fa-lightbulb"></i>
+    </div>
+</div>
+
+<!-- ===== شريط الحالة المحسن ===== -->
+<div class="epic-status-bar">
+    <div class="player-profile">
+        <div class="player-avatar">
+            <i class="fas fa-crown"></i>
+        </div>
+        <div>
+            <div class="player-name" id="studentNameEpic">البطل</div>
+            <div class="player-title" id="playerTitle">مغامر مبتدئ</div>
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <div class="hearts-epic" id="heartsEpicContainer"></div>
+        <div class="points-epic">
+            <i class="fas fa-star"></i>
+            <span id="pointsEpic">0</span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== خريطة العالم ===== -->
+<div id="worldMap" class="world-map">
+    <div class="map-title">
+        <h1>⚡ مملكة العلوم ⚡</h1>
+        <div class="map-subtitle">
+            <div class="magic-line"></div>
+            <span><i class="fas fa-dragon"></i> اختر رحلتك يا بطل الأول الإعدادي <i class="fas fa-dragon"></i></span>
+            <div class="magic-line"></div>
+        </div>
+    </div>
+    
+    <div class="stages-epic-grid" id="stagesEpicGrid"></div>
+</div>
+
+<!-- ===== ساحة المعركة الملحمية ===== -->
+<div id="battleEpicArena" class="battle-epic-arena">
+    <div class="battle-header-epic">
+        <div class="battle-info-epic">
+            <i class="fas fa-skull-crossbones"></i>
+            <span id="currentStageEpic">الرحلة 1</span>
+        </div>
+        <div class="battle-info-epic">
+            <i class="fas fa-question-circle"></i>
+            <span id="questionCounterEpic">1/15</span>
+        </div>
+    </div>
+    
+    <div id="battleSceneEpic" class="battle-scene-epic monster">
+        <div class="battle-effects" id="battleEffects"></div>
+        <div class="enemy-epic" id="enemyEpic">
+            <i class="fas fa-dragon"></i>
+        </div>
+        <div class="battle-question-epic" id="questionTextEpic">
+            جاري استدعاء السؤال...
+        </div>
+    </div>
+    
+    <div class="options-epic-container" id="optionsEpicContainer"></div>
+</div>
+
+<!-- ===== تحذير الخروج المحسن ===== -->
+<div id="exitWarningEpic" class="exit-warning-epic">
+    <i class="fas fa-exclamation-triangle"></i>
+    <span>الانسحاب الآن سيكلفك قلباً وسيتم تسجيل هزيمة!</span>
+    <button onclick="window.continueBattleEpic?.()">🔥 استمر</button>
+</div>
+
+<!-- ===== شاشة النتيجة الملحمية ===== -->
+<div id="resultEpicScreen" class="result-epic-screen">
+    <div class="result-epic-card">
+        <div class="result-epic-icon" id="resultEpicIcon">
+            <i class="fas fa-crown"></i>
+        </div>
+        <div class="result-epic-title" id="resultEpicTitle">انتصار عظيم!</div>
+        
+        <div class="result-epic-stats">
+            <div class="result-epic-stat">
+                <span>✨ النقاط الذهبية</span>
+                <span id="resultEpicPoints">0</span>
+            </div>
+            <div class="result-epic-stat">
+                <span>⚔️ الانتصارات</span>
+                <span id="resultEpicCorrect">0/15</span>
+            </div>
+            <div class="result-epic-stat">
+                <span>❤️ القلوب</span>
+                <span id="resultEpicHearts">3</span>
+            </div>
+        </div>
+        
+        <div class="result-epic-message" id="resultEpicMessage">
+            مستر إسماعيل عماد يهنئك!
+        </div>
+        
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn-epic-gold" onclick="window.backToMapEpic?.()">
+                <i class="fas fa-map"></i> الخريطة
+            </button>
+            <button class="btn-epic-outline" onclick="window.restartStageEpic?.()">
+                <i class="fas fa-redo-alt"></i> مرة أخرى
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== Firebase SDK ===== -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+    import { 
+        getFirestore, 
+        collection, 
+        doc, 
+        getDoc, 
+        getDocs, 
+        updateDoc, 
+        serverTimestamp,
+        enableIndexedDbPersistence
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+    // ==================== تهيئة Firebase ====================
+    const firebaseConfig = {
+        apiKey: "AIzaSyBPgtF_GqT95QkMwwoJMGiZWFPjHFdA_N0",
+        authDomain: "manassa-oloom.firebaseapp.com",
+        projectId: "manassa-oloom",
+        storageBucket: "manassa-oloom.firebasestorage.app",
+        messagingSenderId: "475047988456",
+        appId: "1:475047988456:web:ab25a9b01b5c77483b0d5d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    
+    enableIndexedDbPersistence(db).catch(err => console.log("Persistence:", err));
+    window.db = db;
+
+    // ==================== البيانات العامة ====================
+    const grade = 'grade7'; // الصف الأول الإعدادي
+    let studentData = null;
+    let currentStage = 1;
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let hearts = 3;
+    let points = 0;
+    let correct = 0;
+    let battleActive = false;
+    
+    // ==================== هيكل بيانات المراحل الجديد ====================
+    const stageStatus = {
+        1: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null },
+        2: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null },
+        3: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null },
+        4: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null },
+        5: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null },
+        6: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null },
+        7: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null },
+        8: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null },
+        9: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null },
+        10: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null },
+        11: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null },
+        12: { status: 'loading', unlockDate: null, questionsCount: 0, hasQuestions: false, completed: false, error: null }
+    };
+    
+    let achievements = [];
+    
+    // نصائح ملحمية للأول الإعدادي
+    const epicTips = [
+        "🧪 الذرة تتكون من نواة وإلكترونات!",
+        "🔬 الخلية هي وحدة بناء الكائن الحي!",
+        "⚡ التيار الكهربائي = الجهد ÷ المقاومة!",
+        "🌍 قوة الجاذبية تسارع الأجسام نحو الأرض!",
+        "🧬 الحمض النووي DNA يحمل الصفات الوراثية!",
+        "💧 الماء مركب قطبي له خصائص فريدة!",
+        "🦠 البكتيريا كائنات وحيدة الخلية!",
+        "🧪 التفاعل الكيميائي ينتج مواد جديدة!"
+    ];
+
+    // ==================== تهيئة المؤثرات ====================
+    function initEpicEffects() {
+        const effects = document.getElementById('battleEffects');
+        if (effects) {
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'battle-particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 5 + 's';
+                p.style.animationDuration = 3 + Math.random() * 4 + 's';
+                effects.appendChild(p);
+            }
+        }
+    }
+
+    // ==================== تحميل بيانات الطالب مع الإنجازات ====================
+    async function loadStudentDataEpic() {
+        const local = localStorage.getItem('studentData');
+        if (!local) { 
+            window.location.href = 'challenge1.html'; 
+            return;
+        }
+        
+        try {
+            studentData = JSON.parse(local);
+            if (studentData.grade !== grade) { 
+                window.location.href = 'challenge1.html'; 
+                return;
+            }
+        } catch (e) {
+            window.location.href = 'challenge1.html';
+            return;
+        }
+        
+        document.getElementById('studentNameEpic').innerText = studentData.name || 'البطل';
+        
+        // نظام الألقاب للأول الإعدادي
+        const titles = ['مغامر مبتدئ', 'فارس علوم', 'باحث متقدم', 'عالم صغير', 'عبقري المستقبل'];
+        const level = Math.floor((studentData.points || 0) / 250);
+        document.getElementById('playerTitle').innerText = titles[Math.min(level, 4)] || 'أسطورة العلم';
+        
+        points = studentData.points || 0;
+        hearts = studentData.hearts || 3;
+        currentStage = studentData.lastStage || 1;
+        achievements = studentData.achievements || [];
+        
+        updateHeartsEpic();
+        updatePointsEpic();
+    }
+
+    // ==================== عرض الخريطة فوراً (بدون انتظار) ====================
+    function renderStagesMapImmediately() {
+        const grid = document.getElementById('stagesEpicGrid');
+        grid.innerHTML = '';
+        
+        const icons = ['dragon', 'flask', 'rocket', 'tree', 'skull', 'robot', 'magic', 'crown', 'shield', 'bolt', 'book', 'atom'];
+        
+        for (let i = 1; i <= 12; i++) {
+            const card = document.createElement('div');
+            card.className = 'stage-epic-card loading';
+            card.setAttribute('data-stage', i);
+            
+            card.innerHTML = `
+                <div class="stage-icon-epic">
+                    <i class="fas fa-spinner fa-pulse" style="color: #D4AF37;"></i>
+                </div>
+                <div class="stage-number-epic">الرحلة ${i}</div>
+                <div class="stage-badge loading">🔍 جاري التحميل...</div>
+                <div class="stage-questions-count">
+                    <i class="fas fa-question-circle"></i> -- سؤال
+                </div>
+            `;
+            
+            card.onclick = () => checkAndStartStage(i);
+            grid.appendChild(card);
+        }
+    }
+
+    // ==================== تحميل بيانات المرحلة الواحدة في الخلفية ====================
+    async function loadSingleStageData(stageNumber) {
+        try {
+            // التحقق من الكاش أولاً (مع صلاحية أقصر - 5 دقائق فقط)
+            const cacheKey = `stage_${grade}_${stageNumber}_info`;
+            const cached = localStorage.getItem(cacheKey);
+            const today = new Date().toISOString().split('T')[0];
+            
+            if (cached) {
+                const data = JSON.parse(cached);
+                // إذا كان الكاش حديثاً (أقل من 5 دقائق)
+                if (Date.now() - data.timestamp < 5 * 60 * 1000) {
+                    stageStatus[stageNumber] = {
+                        ...data.info,
+                        status: 'ready'
+                    };
+                    updateStageCard(stageNumber);
+                    return;
+                }
+            }
+            
+            // تحميل من Firebase
+            const stageRef = doc(db, "adventures", grade, "stages", `stage${stageNumber}`);
+            const stageSnap = await getDoc(stageRef);
+            
+            let qCount = 0;
+            let unlockDate = null;
+            let stageCompleted = studentData?.completedStages?.includes(stageNumber) || false;
+            
+            if (stageSnap.exists()) {
+                const data = stageSnap.data();
+                unlockDate = data.unlockDate;
+                
+                // تحميل عدد الأسئلة
+                try {
+                    const qRef = collection(db, "adventures", grade, "stages", `stage${stageNumber}`, "questions");
+                    const qSnap = await getDocs(qRef);
+                    qCount = qSnap.size;
+                } catch (e) {}
+            }
+            
+            const hasQuestions = qCount > 0;
+            
+            // تحديث الحالة
+            stageStatus[stageNumber] = {
+                status: 'ready',
+                unlockDate: unlockDate,
+                questionsCount: qCount,
+                hasQuestions: hasQuestions,
+                completed: stageCompleted,
+                error: null
+            };
+            
+            // حفظ في الكاش
+            localStorage.setItem(cacheKey, JSON.stringify({
+                info: stageStatus[stageNumber],
+                timestamp: Date.now()
+            }));
+            
+            updateStageCard(stageNumber);
+            
+        } catch (error) {
+            console.error(`Error loading stage ${stageNumber}:`, error);
+            stageStatus[stageNumber] = {
+                status: 'error',
+                error: 'فشل التحميل',
+                unlockDate: null,
+                questionsCount: 0,
+                hasQuestions: false,
+                completed: false
+            };
+            updateStageCard(stageNumber);
+        }
+    }
+
+    // ==================== تحديث بطاقة مرحلة واحدة ====================
+    function updateStageCard(stageNumber) {
+        const card = document.querySelector(`.stage-epic-card[data-stage="${stageNumber}"]`);
+        if (!card) return;
+        
+        const data = stageStatus[stageNumber];
+        if (!data || data.status === 'loading') return;
+        
+        const today = new Date().toISOString().split('T')[0];
+        const icons = ['dragon', 'flask', 'rocket', 'tree', 'skull', 'robot', 'magic', 'crown', 'shield', 'bolt', 'book', 'atom'];
+        
+        let statusClass = 'locked';
+        let statusText = '🔒 مغلقة';
+        let iconColor = 'rgba(255,255,255,0.3)';
+        let questionsText = `${data.questionsCount || 0} سؤال`;
+        
+        if (data.completed) {
+            statusClass = 'completed';
+            statusText = '✅ مكتملة';
+            iconColor = '#28a745';
+        } else if (data.hasQuestions && data.unlockDate && today >= data.unlockDate) {
+            statusClass = 'unlocked';
+            statusText = '⚔️ متاحة';
+            iconColor = '#D4AF37';
+        } else if (data.status === 'error') {
+            statusText = '❌ خطأ';
+            iconColor = '#ff4444';
+        } else if (!data.unlockDate) {
+            statusText = '📝 قيد الإعداد';
+        } else if (today < data.unlockDate) {
+            statusText = `📅 ${new Date(data.unlockDate).toLocaleDateString('ar-EG')}`;
+        } else if (!data.hasQuestions) {
+            statusText = '📝 لا توجد أسئلة';
+        }
+        
+        card.className = `stage-epic-card ${statusClass}`;
+        card.innerHTML = `
+            <div class="stage-icon-epic">
+                <i class="fas fa-${icons[(stageNumber-1) % icons.length]}" style="color: ${iconColor};"></i>
+            </div>
+            <div class="stage-number-epic">الرحلة ${stageNumber}</div>
+            <div class="stage-badge ${statusClass}">${statusText}</div>
+            <div class="stage-questions-count" style="${data.completed ? 'color: #28a745;' : ''}">
+                <i class="fas fa-question-circle"></i> ${questionsText}
+            </div>
+        `;
+    }
+
+    // ==================== التحقق والبدء عند النقر ====================
+    async function checkAndStartStage(stageNumber) {
+        const data = stageStatus[stageNumber];
+        
+        // إذا البيانات لسه ما تحملتش
+        if (!data || data.status === 'loading') {
+            const card = document.querySelector(`.stage-epic-card[data-stage="${stageNumber}"]`);
+            if (card) {
+                card.innerHTML = `
+                    <div class="stage-icon-epic">
+                        <i class="fas fa-spinner fa-pulse" style="color: #D4AF37;"></i>
+                    </div>
+                    <div class="stage-number-epic">الرحلة ${stageNumber}</div>
+                    <div class="stage-badge loading">⚡ جاري التحميل...</div>
+                `;
+            }
+            
+            await loadSingleStageData(stageNumber);
+            
+            const newData = stageStatus[stageNumber];
+            if (newData.hasQuestions && newData.unlockDate && 
+                new Date().toISOString().split('T')[0] >= newData.unlockDate) {
+                startStageEpic(stageNumber);
+            } else {
+                showLockMessage(stageNumber);
+            }
+            return;
+        }
+        
+        if (data.completed) {
+            showCompletedMessage(stageNumber);
+            return;
+        }
+        
+        if (!data.hasQuestions) {
+            Swal.fire({
+                icon: 'info',
+                title: '🚫 لا توجد أسئلة',
+                text: 'هذه الرحلة قيد الإعداد حالياً',
+                background: '#0B1E33',
+                color: 'white',
+                confirmButtonColor: '#D4AF37'
+            });
+            return;
+        }
+        
+        const today = new Date().toISOString().split('T')[0];
+        if (data.unlockDate && today >= data.unlockDate) {
+            startStageEpic(stageNumber);
+        } else if (data.unlockDate) {
+            Swal.fire({
+                icon: 'info',
+                title: '📅 الرحلة مغلقة',
+                text: `ستتاح في ${new Date(data.unlockDate).toLocaleDateString('ar-EG')}`,
+                background: '#0B1E33',
+                color: 'white',
+                confirmButtonColor: '#D4AF37'
+            });
+        } else {
+            Swal.fire({
+                icon: 'info',
+                title: '🚫 رحلة مغلقة',
+                text: 'لم يتم تحديد تاريخ للفتح بعد',
+                background: '#0B1E33',
+                color: 'white',
+                confirmButtonColor: '#D4AF37'
+            });
+        }
+    }
+
+    function showLockMessage(stageNumber) {
+        const data = stageStatus[stageNumber];
+        if (data.unlockDate) {
+            Swal.fire({
+                icon: 'info',
+                title: '📅 الرحلة مغلقة',
+                text: `ستتاح في ${new Date(data.unlockDate).toLocaleDateString('ar-EG')}`,
+                background: '#0B1E33',
+                color: 'white',
+                confirmButtonColor: '#D4AF37'
+            });
+        } else {
+            Swal.fire({
+                icon: 'info',
+                title: '🚫 رحلة مغلقة',
+                text: 'لم يتم تحديد تاريخ للفتح بعد',
+                background: '#0B1E33',
+                color: 'white',
+                confirmButtonColor: '#D4AF37'
+            });
+        }
+    }
+
+    // ==================== نظام منع إعادة اللعب ====================
+    function showCompletedMessage(stage) {
+        Swal.fire({
+            title: '🏆 رحلة مكتملة!',
+            html: `
+                <div style="text-align: center;">
+                    <i class="fas fa-trophy" style="font-size: 50px; color: #D4AF37; margin-bottom: 15px;"></i>
+                    <p style="font-size: 16px;">لقد أكملت هذه الرحلة من قبل!</p>
+                    <p style="color: #28a745;">إعادة اللعب لن تزيد نقاطك</p>
+                </div>
+            `,
+            icon: 'success',
+            background: '#0B1E33',
+            color: 'white',
+            confirmButtonColor: '#D4AF37',
+            showCancelButton: true,
+            cancelButtonColor: '#666',
+            confirmButtonText: '⚔️ تدريب (بدون نقاط)',
+            cancelButtonText: '🔙 العودة'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                startStageEpic(stage, true);
+            }
+        });
+    }
+
+    // ==================== بدء المرحلة ====================
+    async function startStageEpic(stageNumber, trainingMode = false) {
+        if (battleActive) return;
+        
+        const confirm = await Swal.fire({
+            title: trainingMode ? '🏋️ وضع التدريب' : '⚔️ استعد للمعركة!',
+            html: `
+                <div style="text-align: center;">
+                    <i class="fas ${trainingMode ? 'fa-dumbbell' : 'fa-dragon'}" style="font-size: 50px; color: #D4AF37; margin-bottom: 15px;"></i>
+                    <p style="font-size: 18px;">${trainingMode ? 'تدريب الرحلة ' + stageNumber : 'مواجهة الرحلة ' + stageNumber}</p>
+                    <p style="color: ${trainingMode ? '#28a745' : '#ff4444'};">
+                        ${trainingMode ? '⚠️ لن تضاف النقاط' : '🔥 10 نقاط لكل إجابة صحيحة'}
+                    </p>
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonColor: '#D4AF37',
+            cancelButtonColor: '#666',
+            confirmButtonText: trainingMode ? 'ابدأ التدريب' : 'انطلق!',
+            cancelButtonText: 'لاحقاً',
+            background: '#0B1E33',
+            color: 'white'
+        });
+        
+        if (!confirm.isConfirmed) return;
+        
+        showLoadingEpic();
+        currentStage = stageNumber;
+        
+        try {
+            await loadQuestionsFromFirebase(stageNumber);
+            
+            if (currentQuestions.length === 0) {
+                throw new Error("No questions");
+            }
+            
+            cacheQuestions(stageNumber, currentQuestions);
+            
+            hideLoadingEpic();
+            startBattleEpic(trainingMode);
+            
+        } catch (error) {
+            hideLoadingEpic();
+            Swal.fire({ 
+                icon: 'error', 
+                title: 'عذراً', 
+                text: 'لا توجد أسئلة', 
+                background: '#0B1E33', 
+                confirmButtonColor: '#D4AF37' 
+            });
+        }
+    }
+
+    // ==================== تحميل الأسئلة من Firebase ====================
+    async function loadQuestionsFromFirebase(stage) {
+        const ref = collection(db, "adventures", grade, "stages", `stage${stage}`, "questions");
+        const snap = await getDocs(ref);
+        currentQuestions = [];
+        snap.forEach(d => currentQuestions.push({ id: d.id, ...d.data() }));
+        currentQuestions.sort((a, b) => (a.order || 0) - (b.order || 0));
+    }
+
+    function cacheQuestions(stage, questions) {
+        const key = `stage_${grade}_${stage}_questions`;
+        localStorage.setItem(key, JSON.stringify({ 
+            questions, 
+            timestamp: Date.now() 
+        }));
+    }
+
+    // ==================== بدء المعركة ====================
+    function startBattleEpic(trainingMode = false) {
+        battleActive = true;
+        currentIndex = 0;
+        hearts = 3;
+        correct = 0;
+        
+        window.trainingMode = trainingMode;
+        
+        document.getElementById('worldMap').style.display = 'none';
+        document.getElementById('battleEpicArena').classList.add('active');
+        
+        updateHeartsEpic();
+        renderQuestionEpic();
+        setupExitProtectionEpic();
+    }
+
+    // ==================== عرض السؤال ====================
+    function renderQuestionEpic() {
+        if (currentIndex >= currentQuestions.length) {
+            endStageEpic(true);
+            return;
+        }
+        
+        const q = currentQuestions[currentIndex];
+        
+        document.getElementById('questionCounterEpic').innerText = `${currentIndex + 1}/${currentQuestions.length}`;
+        document.getElementById('currentStageEpic').innerText = `الرحلة ${currentStage} ${window.trainingMode ? '(تدريب)' : ''}`;
+        document.getElementById('questionTextEpic').innerText = q.text;
+        
+        const scene = document.getElementById('battleSceneEpic');
+        const avatar = document.getElementById('enemyEpic');
+        
+        scene.className = 'battle-scene-epic';
+        switch(q.adventureType) {
+            case 'lab': 
+                scene.classList.add('lab'); 
+                avatar.innerHTML = '<i class="fas fa-flask" style="color: #00d4ff;"></i>';
+                break;
+            case 'space': 
+                scene.classList.add('space'); 
+                avatar.innerHTML = '<i class="fas fa-rocket" style="color: #9d4edd;"></i>';
+                break;
+            case 'jungle': 
+                scene.classList.add('jungle'); 
+                avatar.innerHTML = '<i class="fas fa-tree" style="color: #28a745;"></i>';
+                break;
+            default: 
+                scene.classList.add('monster'); 
+                avatar.innerHTML = '<i class="fas fa-dragon" style="color: #D4AF37;"></i>';
+        }
+        
+        const container = document.getElementById('optionsEpicContainer');
+        container.innerHTML = '';
+        
+        const prefixes = ['A', 'B', 'C', 'D'];
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-epic-btn';
+            btn.innerHTML = `<span class="option-prefix-epic">${prefixes[idx]}</span><span>${opt}</span>`;
+            btn.onclick = () => selectAnswerEpic(idx, q.correctAnswer);
+            container.appendChild(btn);
+        });
+        
+        gsap.from('.option-epic-btn', {
+            duration: 0.5,
+            opacity: 0,
+            x: -30,
+            stagger: 0.1,
+            ease: "back.out(1.4)"
+        });
+    }
+
+    // ==================== اختيار الإجابة ====================
+    function selectAnswerEpic(selected, correctIdx) {
+        const btns = document.querySelectorAll('.option-epic-btn');
+        btns.forEach(btn => btn.onclick = null);
+        
+        const isCorrect = selected === correctIdx;
+        
+        if (isCorrect) {
+            btns[selected].classList.add('correct');
+            
+            if (!window.trainingMode) {
+                points += 10;
+            }
+            correct++;
+            
+            for (let i = 0; i < 6; i++) {
+                createStarEffect();
+            }
+            
+            if (points > 0 && points % 100 === 0) {
+                showMilestoneEpic();
+                checkAchievements();
+            }
+            
+        } else {
+            btns[selected].classList.add('wrong');
+            btns[correctIdx].classList.add('correct');
+            
+            hearts--;
+            updateHeartsEpic();
+            
+            document.querySelector('.enemy-epic').classList.add('shake');
+            setTimeout(() => {
+                document.querySelector('.enemy-epic')?.classList.remove('shake');
+            }, 400);
+        }
+        
+        updatePointsEpic();
+        
+        if (hearts <= 0) {
+            setTimeout(() => endStageEpic(false), 1500);
+            return;
+        }
+        
+        setTimeout(() => {
+            currentIndex++;
+            renderQuestionEpic();
+        }, 1500);
+    }
+
+    // ==================== إنشاء تأثير نجوم ====================
+    function createStarEffect() {
+        const star = document.createElement('i');
+        star.className = 'fas fa-star star-particle';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--x', (Math.random() - 0.5) * 150 + 'px');
+        star.style.setProperty('--y', -80 - Math.random() * 80 + 'px');
+        document.body.appendChild(star);
+        
+        setTimeout(() => star.remove(), 1200);
+    }
+
+    // ==================== عرض إنجاز 100 نقطة ====================
+    function showMilestoneEpic() {
+        const div = document.createElement('div');
+        div.className = 'milestone-celebration';
+        div.innerHTML = '<div class="celebration-text">🔥 100 نقطة 🔥</div>';
+        document.body.appendChild(div);
+        
+        for (let i = 0; i < 15; i++) {
+            setTimeout(() => createStarEffect(), i * 40);
+        }
+        
+        showAchievement('💯 100 نقطة', 'أحسنت يا بطل!');
+        
+        setTimeout(() => div.remove(), 1800);
+    }
+
+    // ==================== نظام الإنجازات ====================
+    function checkAchievements() {
+        const newAchievements = [];
+        
+        if (points >= 100 && !achievements.includes('100_points')) {
+            achievements.push('100_points');
+            newAchievements.push('💯 100 نقطة');
+        }
+        if (points >= 500 && !achievements.includes('500_points')) {
+            achievements.push('500_points');
+            newAchievements.push('👑 500 نقطة - عالم صغير');
+        }
+        if (correct >= 10 && !achievements.includes('10_correct')) {
+            achievements.push('10_correct');
+            newAchievements.push('⚡ 10 إجابات صحيحة متتالية');
+        }
+        
+        newAchievements.forEach(ach => showAchievement(ach, 'إنجاز جديد!'));
+        
+        if (newAchievements.length > 0) {
+            studentData.achievements = achievements;
+            localStorage.setItem('studentData', JSON.stringify(studentData));
+        }
+    }
+
+    function showAchievement(title, desc) {
+        const popup = document.createElement('div');
+        popup.className = 'achievement-popup';
+        popup.innerHTML = `
+            <i class="fas fa-trophy"></i>
+            <div>
+                <div style="font-size: 16px; font-weight: 900; color: #D4AF37;">${title}</div>
+                <div style="font-size: 13px;">${desc}</div>
+            </div>
+        `;
+        document.body.appendChild(popup);
+        
+        setTimeout(() => {
+            popup.classList.add('fade-out');
+            setTimeout(() => popup.remove(), 400);
+        }, 2500);
+    }
+
+    // ==================== إنهاء المرحلة ====================
+    async function endStageEpic(completed) {
+        battleActive = false;
+        
+        if (!window.trainingMode) {
+            studentData.points = points;
+            studentData.hearts = completed ? 3 : Math.max(1, hearts);
+            studentData.lastStage = completed ? currentStage + 1 : currentStage;
+            
+            if (completed) {
+                studentData.completedStages = studentData.completedStages || [];
+                if (!studentData.completedStages.includes(currentStage)) {
+                    studentData.completedStages.push(currentStage);
+                }
+                
+                if (stageStatus[currentStage]) {
+                    stageStatus[currentStage].completed = true;
+                }
+            }
+            
+            localStorage.setItem('studentData', JSON.stringify(studentData));
+            
+            if (db && studentData.firebaseId) {
+                try {
+                    await updateDoc(doc(db, "students", studentData.firebaseId), {
+                        points: points,
+                        hearts: studentData.hearts,
+                        lastStage: studentData.lastStage,
+                        lastActive: serverTimestamp()
+                    });
+                } catch (e) {}
+            }
+        }
+        
+        showResultEpic(completed);
+    }
+
+    // ==================== عرض النتيجة ====================
+    function showResultEpic(completed) {
+        const screen = document.getElementById('resultEpicScreen');
+        
+        if (window.trainingMode) {
+            document.getElementById('resultEpicPoints').innerText = 'تدريب';
+        } else {
+            document.getElementById('resultEpicPoints').innerText = points;
+        }
+        
+        document.getElementById('resultEpicCorrect').innerText = `${correct}/${currentQuestions.length}`;
+        document.getElementById('resultEpicHearts').innerText = hearts;
+        
+        if (completed) {
+            document.getElementById('resultEpicIcon').innerHTML = '<i class="fas fa-crown"></i>';
+            document.getElementById('resultEpicTitle').innerText = '🏆 انتصار عظيم!';
+            
+            if (window.trainingMode) {
+                document.getElementById('resultEpicMessage').innerText = 'تدريب ممتاز!';
+            } else {
+                document.getElementById('resultEpicMessage').innerText = `مبروك! جمعت ${points} نقطة!`;
+            }
+            
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => createStarEffect(), i * 40);
+            }
+            
+        } else {
+            document.getElementById('resultEpicIcon').innerHTML = '<i class="fas fa-skull"></i>';
+            document.getElementById('resultEpicTitle').innerText = '💔 هزيمة';
+            document.getElementById('resultEpicMessage').innerText = 'لا تستسلم!';
+        }
+        
+        screen.style.display = 'flex';
+    }
+
+    // ==================== العودة للخريطة ====================
+    function backToMapEpic() {
+        document.getElementById('resultEpicScreen').style.display = 'none';
+        document.getElementById('battleEpicArena').classList.remove('active');
+        document.getElementById('worldMap').style.display = 'block';
+        window.trainingMode = false;
+        
+        if (stageStatus[currentStage]?.completed) {
+            updateStageCard(currentStage);
+        }
+    }
+
+    // ==================== إعادة المحاولة ====================
+    function restartStageEpic() {
+        document.getElementById('resultEpicScreen').style.display = 'none';
+        startStageEpic(currentStage, window.trainingMode);
+    }
+
+    // ==================== تحديث القلوب ====================
+    function updateHeartsEpic() {
+        const container = document.getElementById('heartsEpicContainer');
+        container.innerHTML = '';
+        
+        for (let i = 0; i < 3; i++) {
+            const heart = document.createElement('i');
+            heart.className = `fas fa-heart heart-epic ${i >= hearts ? 'lost' : ''}`;
+            container.appendChild(heart);
+        }
+    }
+
+    function updatePointsEpic() {
+        document.getElementById('pointsEpic').innerText = points;
+    }
+
+    // ==================== حماية الخروج ====================
+    function setupExitProtectionEpic() {
+        history.pushState(null, null, location.href);
+        window.onpopstate = () => {
+            if (battleActive) {
+                document.getElementById('exitWarningEpic').style.display = 'flex';
+                history.pushState(null, null, location.href);
+            }
+        };
+        
+        window.onbeforeunload = (e) => {
+            if (battleActive) {
+                e.preventDefault();
+                return '';
+            }
+        };
+    }
+
+    window.continueBattleEpic = function() {
+        document.getElementById('exitWarningEpic').style.display = 'none';
+    };
+
+    // ==================== شاشة التحميل ====================
+    function showLoadingEpic() {
+        document.getElementById('loadingEpic').classList.remove('hidden');
+        
+        let idx = 0;
+        const tip = document.getElementById('epicLoadingTip').querySelector('span');
+        const interval = setInterval(() => {
+            idx = (idx + 1) % epicTips.length;
+            tip.innerText = epicTips[idx];
+        }, 1500);
+        
+        window.loadingInterval = interval;
+    }
+
+    function hideLoadingEpic() {
+        setTimeout(() => {
+            document.getElementById('loadingEpic').classList.add('hidden');
+            if (window.loadingInterval) clearInterval(window.loadingInterval);
+        }, 400);
+    }
+
+    // ==================== دوال عامة ====================
+    window.startStageEpic = startStageEpic;
+    window.backToMapEpic = backToMapEpic;
+    window.restartStageEpic = restartStageEpic;
+    window.continueBattleEpic = continueBattleEpic;
+
+    // ==================== وضع عدم الاتصال ====================
+    function useOfflineDataEpic() {
+        studentData = JSON.parse(localStorage.getItem('studentData')) || {
+            name: 'بطل',
+            grade: grade,
+            points: 0,
+            hearts: 3,
+            lastStage: 1,
+            completedStages: []
+        };
+        
+        document.getElementById('studentNameEpic').innerText = studentData.name;
+        points = studentData.points;
+        hearts = studentData.hearts;
+        
+        updateHeartsEpic();
+        updatePointsEpic();
+        
+        for (let i = 1; i <= 12; i++) {
+            const d = new Date();
+            d.setDate(d.getDate() + (i - 1) * 7);
+            
+            stageStatus[i] = {
+                status: 'ready',
+                unlockDate: d.toISOString().split('T')[0],
+                questionsCount: 15,
+                hasQuestions: true,
+                completed: studentData.completedStages?.includes(i) || false
+            };
+            updateStageCard(i);
+        }
+    }
+
+    // ==================== التهيئة ====================
+    window.addEventListener('load', async () => {
+        initEpicEffects();
+        showLoadingEpic();
+        
+        try {
+            await loadStudentDataEpic();
+            renderStagesMapImmediately();
+            
+            setTimeout(() => hideLoadingEpic(), 600);
+            
+            for (let i = 1; i <= 12; i++) {
+                setTimeout(() => loadSingleStageData(i), i * 120);
+            }
+            
+        } catch (error) {
+            console.error("Init error:", error);
+            hideLoadingEpic();
+            useOfflineDataEpic();
+        }
+    });
+
+    // ==================== مراقبة الاتصال ====================
+    window.addEventListener('online', () => {
+        Swal.fire({ 
+            icon: 'success', 
+            title: 'تم الاتصال', 
+            text: 'جاري تحديث البيانات...', 
+            timer: 1500, 
+            background: '#0B1E33', 
+            confirmButtonColor: '#D4AF37',
+            showConfirmButton: false
+        });
+        
+        for (let i = 1; i <= 12; i++) {
+            loadSingleStageData(i);
+        }
+    });
+
+</script>
+
+</body>
+</html>
