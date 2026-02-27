@@ -462,6 +462,12 @@
                 <span id="errorText"></span>
             </div>
 
+            <!-- رسالة نجاح -->
+            <div class="error-message" id="successMessage" style="color: #10b981; background: rgba(16, 185, 129, 0.1); display: none;">
+                <i class="fas fa-check-circle"></i>
+                <span id="successText"></span>
+            </div>
+
             <!-- توقيع -->
             <div class="footer-note">
                 <i class="fas fa-crown" style="color: var(--royal-gold);"></i>
@@ -470,7 +476,7 @@
         </div>
     </div>
 
-    <!-- Firebase SDK (نفس الكود السابق تماماً) -->
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
@@ -502,22 +508,25 @@
             return deviceId;
         }
 
+        // دالة لعرض رسالة نجاح
+        function showSuccessMessage(message) {
+            const successDiv = document.getElementById('successMessage');
+            const successText = document.getElementById('successText');
+            successText.textContent = message;
+            successDiv.style.display = 'flex';
+            
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // التحقق من الدخول السابق (للذاكرة المحلية فقط)
         async function checkPreviousAccess() {
-            const deviceId = getDeviceId();
             const savedCode = localStorage.getItem('verified_live');
             
             if (savedCode) {
-                const q = query(
-                    collection(db, "verified_devices"),
-                    where("code", "==", savedCode),
-                    where("deviceId", "==", deviceId),
-                    where("page", "==", "live")
-                );
-                
-                const snapshot = await getDocs(q);
-                if (!snapshot.empty) {
-                    window.location.href = nextPage;
-                }
+                // مجرد تذكير بأن لديك جلسة سابقة - لكن لا نوجه تلقائياً
+                showSuccessMessage('لديك جلسة سابقة. يمكنك استخدام الكود مرة أخرى للدخول.');
             }
         }
 
@@ -540,55 +549,42 @@
             verifyBtn.disabled = true;
 
             try {
+                // التحقق من وجود الكود في قاعدة البيانات (بدون التحقق من isUsed)
                 const codesRef = collection(db, "access_codes");
                 const codeQuery = query(
                     codesRef,
-                    where("code", "==", code),
-                    where("isUsed", "==", false)
+                    where("code", "==", code)
                 );
                 
                 const codeSnapshot = await getDocs(codeQuery);
                 
                 if (codeSnapshot.empty) {
-                    showError('الكود غير صحيح أو تم استخدامه من قبل');
+                    showError('الكود غير صحيح');
                     resetButton();
                     return;
                 }
 
-                const codeDoc = codeSnapshot.docs[0];
+                // الكود موجود - نسمح بالدخول
                 const deviceId = getDeviceId();
 
-                const deviceQuery = query(
-                    collection(db, "verified_devices"),
-                    where("code", "==", code)
-                );
-                
-                const deviceSnapshot = await getDocs(deviceQuery);
-                
-                if (!deviceSnapshot.empty) {
-                    showError('هذا الكود مستخدم بالفعل على جهاز آخر');
-                    resetButton();
-                    return;
+                // تسجيل محاولة الدخول (للإحصاء فقط - بدون منع)
+                try {
+                    await addDoc(collection(db, "access_logs"), {
+                        code: code,
+                        deviceId: deviceId,
+                        page: "live",
+                        accessedAt: new Date().toISOString(),
+                        userAgent: navigator.userAgent
+                    });
+                } catch (logError) {
+                    console.log("خطأ في تسجيل الدخول (غير مهم):", logError);
                 }
 
-                await updateDoc(doc(db, "access_codes", codeDoc.id), {
-                    isUsed: true,
-                    usedBy: deviceId,
-                    usedAt: new Date().toISOString(),
-                    usedOnPage: "live"
-                });
-
-                await addDoc(collection(db, "verified_devices"), {
-                    code: code,
-                    deviceId: deviceId,
-                    page: "live",
-                    verifiedAt: new Date().toISOString(),
-                    userAgent: navigator.userAgent
-                });
-
+                // حفظ في localStorage للذاكرة المحلية فقط
                 localStorage.setItem('verified_live', code);
                 localStorage.setItem('deviceId', deviceId);
 
+                // رسالة نجاح وتوجيه
                 showSuccess();
 
             } catch (error) {
@@ -607,6 +603,8 @@
             setTimeout(() => {
                 errorDiv.style.display = 'none';
             }, 4000);
+            
+            resetButton();
         }
 
         function resetButton() {
