@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>الامتحان التفاعلي | أ/إسماعيل عماد</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/dist/fp.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            color: #facc15;
+            font-size: 26px;
+        }
+        .header p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        .timer {
+            background: #0f172a;
+            border-radius: 60px;
+            padding: 12px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #facc15;
+        }
+        .timer span {
+            color: #facc15;
+            font-size: 28px;
+            font-weight: 800;
+        }
+        .question-text {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+        .option {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 20px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #cbd5e1;
+        }
+        .option:hover {
+            border-color: #facc15;
+            background: #1e293b;
+        }
+        .option.selected {
+            border-color: #facc15;
+            background: #facc1520;
+            color: #facc15;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #facc15, #eab308);
+            border: none;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f172a;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .progress {
+            color: #94a3b8;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 16px;
+        }
+        .result-card {
+            text-align: center;
+        }
+        .result-score {
+            font-size: 48px;
+            color: #facc15;
+            font-weight: 800;
+            margin: 20px 0;
+        }
+        .mistake-item {
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-right: 4px solid #ef4444;
+            text-align: right;
+        }
+        .correct-answer {
+            color: #4ade80;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        .youtube-card {
+            text-align: center;
+            background: linear-gradient(135deg, #ff000020, #ff000005);
+            border: 1px solid #ff000080;
+        }
+        .youtube-btn {
+            background: #ff0000;
+            color: white;
+            margin: 10px 0;
+        }
+        .skip-btn {
+            background: transparent;
+            border: 1px solid #facc15;
+            color: #facc15;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 20px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .error-msg {
+            background: #991b1b;
+            color: #fecaca;
+            padding: 12px;
+            border-radius: 16px;
+            text-align: center;
+            margin-top: 16px;
+        }
+        @media (max-width: 500px) {
+            .card { padding: 18px; }
+            .question-text { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDCQX8W5omNTx_5tmtyoGjLUvNUKsAJpcA",
+        authDomain: "mrismailemad.firebaseapp.com",
+        projectId: "mrismailemad",
+        storageBucket: "mrismailemad.firebasestorage.app",
+        messagingSenderId: "561984577316",
+        appId: "1:561984577316:web:02902a7c7980f5b1731db1",
+        measurementId: "G-H8N3YCP5E7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ========== كوليكشنات جديدة ==========
+    const STUDENTS_COLL = "exam_students_v3";
+    const QUESTIONS_COLL = "exam_questions_v3";
+    const PROGRESS_COLL = "exam_progress_v3";
+    const DEVICES_COLL = "exam_devices_v3"; // لتخزين بصمات الأجهزة
+
+    // ========== الأسئلة ==========
+    const questionsData = [
+        { text: "يتركب الكروموسوم كيميائياً من حمض نووي يسمى ...... مرتبط مع البروتين.", options: ["RNA", "DNA", "ATP", "النيوكليوتيدة"], correct: "DNA" },
+        { text: "المواد الكيميائية التي تضبط وتنظم معظم وظائف وأنشطة أعضاء الجسم تُعرف بـ:", options: ["الإنزيمات", "الفيتامينات", "الهرمونات", "اللعاب"], correct: "الهرمونات" },
+        { text: "عند زيادة إفراز هرمون النمو في مرحلة الطفولة، يصاب الإنسان بمرض:", options: ["القزامة", "العملاقة", "البول السكري", "الجويتر الجحوظي"], correct: "العملاقة" },
+        { text: "ينجم مرض القزامة في جسم الإنسان عن نقص إفراز هرمون:", options: ["الكالسيتونين", "الثيروكسين", "النمو", "الأنسولين"], correct: "النمو" },
+        { text: "يدخل عنصر اليود في تركيب هرمون ...... بشكل أساسي.", options: ["الأدرينالين", "الكالسيتونين", "الثيروكسين", "النمو"], correct: "الثيروكسين" },
+        { text: "يفرز هرمون الجلوكاجون من غدة:", options: ["النخامية", "البنكرياس", "الدرقية", "الكظرية"], correct: "البنكرياس" },
+        { text: "تعتبر 'فصيلة الدم' في الإنسان من الصفات:", options: ["المكتسبة", "الوراثية", "المتنحية دائماً", "البيئية"], correct: "الوراثية" },
+        { text: "تسمى الغدة النخامية بـ 'سيدة الغدد الصماء' أو الغدة الرئيسية لأنها:", options: ["أكبر الغدد حجماً في الجسم", "تفرز هرمونات تنظم أنشطة معظم الغدد الصماء الأخرى", "تفرز الهرمونات مباشرة في مجرى الدم", "المسؤولة الوحيدة عن عملية النمو"], correct: "تفرز هرمونات تنظم أنشطة معظم الغدد الصماء الأخرى" },
+        { text: "ما النتيجة المترتبة على نقص كمية اليود في الغذاء والماء بالنسبة للإنسان؟", options: ["يقل إفراز هرمون الكالسيتونين ويحدث هشاشة عظام", "يقل إفراز هرمون الثيروكسين ويصاب بالجويتر البسيط", "يزداد إفراز هرمون النمو ويصاب بالعملاقة", "يتوقف البنكرياس عن إفراز الأنسولين"], correct: "يقل إفراز هرمون الثيروكسين ويصاب بالجويتر البسيط" },
+        { text: "تفرز الغدة الكظرية هرمون الأدرينالين لتحفيز أعضاء الجسم للاستجابة في حالات:", options: ["النوم والراحة العميقين", "الطوارئ مثل الخوف والغضب والإثارة", "انخفاض معدل النمو الطفولي", "هضم المواد الكربوهيدراتية"], correct: "الطوارئ مثل الخوف والغضب والإثارة" },
+        { text: "زيادة إفراز هرمون الباراثورمون نتيجة خلل في الغدد جارات الدرقية يؤدي إلى:", options: ["الإصابة بمرض التضخم الجحوظي", "سحب الكالسيوم من العظام مما يسبب هشاشتها ولينها", "انخفاض حاد في مستوى السكر في الدم", "نقص معدل الهدم والتمثيل الغذائي بالجسم"], correct: "سحب الكالسيوم من العظام مما يسبب هشاشتها ولينها" },
+        { text: "عند حدوث تزاوج بين نباتي بازلاء، أحدهما طويل الساق هجين (Tt)، والآخر قصير الساق (tt)، فإن التركيب الجيني للجيل الأول الناتج ونسبته تكون:", options: ["جميعها طويلة هجينة 100% (Tt)", "50% Tt : 50% tt", "75% طويلة : 25% قصيرة", "25% TT : 75% tt"], correct: "50% Tt : 50% tt" },
+        { text: "شخص يعاني من توقف كامل وخلايا البنكرياس عاجزة عن إفراز هرمون الجلوكاجون، وبذل مجهود شاق فانخفض السكر فجأة، ماذا يحدث له؟", options: ["الكبد يحول الجلوكوز الزائد إلى جليكوجين", "يستمر انخفاض السكر وتفشل عملية تحويل الجليكوجين → غيبوبة", "الدرقية تفرز الثيروكسين لرفع السكر", "ينخفض الأنسولين فيرتفع السكر"], correct: "يستمر انخفاض السكر وتفشل عملية تحويل الجليكوجين → غيبوبة" },
+        { text: "عند تعرض شخص لموقف مخيف مع توقف مفاجئ للغدة الكظرية، ما الأثر المتوقع؟", options: ["ارتفاع ضغط الدم ومعدل الضربات", "فشل الجسم في رفع الضغط وضخ السكر للعضلات", "زيادة استجابة الجهاز العصبي السمبثاوي", "إصابة بالعملاقة المؤقتة"], correct: "فشل الجسم في رفع الضغط وضخ السكر للعضلات" },
+        { text: "عند تزاوج نبات بازلاء أصفر القرون نقي (gg) مع أخضر القرون هجين (Gg)، نسبة النباتات الخضراء في الجيل الأول؟", options: ["25%", "50%", "75%", "100%"], correct: "50%" },
+        { text: "بعد تناول وجبة غنية بالسكريات، يفرز الجسم هرمون ...... لخفض السكر.", options: ["الجلوكاجون", "الثيروكسين", "الأنسولين", "الأدرينالين"], correct: "الأنسولين" }
+    ];
+
+    let studentId = null;
+    let studentName = "";
+    let answers = {};
+    let currentIndex = 0;
+    let timerInterval = null;
+    let timeLeft = 20 * 60;
+    let examFinished = false;
+    let subscribeShown = false;
+    let deviceFingerprint = null;
+
+    async function initDatabase() {
+        const questionsRef = collection(db, QUESTIONS_COLL);
+        const existing = await getDocs(questionsRef);
+        if(existing.empty) {
+            for(let i = 0; i < questionsData.length; i++) {
+                await addDoc(questionsRef, {
+                    index: i,
+                    text: questionsData[i].text,
+                    options: questionsData[i].options,
+                    correct: questionsData[i].correct
+                });
+            }
+        }
+    }
+
+    async function getFingerprint() {
+        const fp = await FingerprintJS.load();
+        const result = await fp.get();
+        return result.visitorId;
+    }
+
+    async function checkDeviceAllowed() {
+        const fingerprint = await getFingerprint();
+        deviceFingerprint = fingerprint;
+        
+        // البحث عن هذا الجهاز في قاعدة البيانات
+        const devicesRef = collection(db, DEVICES_COLL);
+        const q = query(devicesRef, where("deviceId", "==", fingerprint));
+        const snapshot = await getDocs(q);
+        
+        if(!snapshot.empty) {
+            const deviceData = snapshot.docs[0].data();
+            if(deviceData.examFinished === true) {
+                return { allowed: false, message: "❌ هذا الجهاز سبق له أداء الامتحان. لا يمكنك الدخول مرة أخرى." };
+            } else {
+                // جهاز موجود لكن الامتحان لم ينته -> استكمال
+                return { allowed: true, existingDevice: snapshot.docs[0], existingStudentId: deviceData.studentId };
+            }
+        }
+        return { allowed: true, existingDevice: null };
+    }
+
+    async function registerDevice(studentId, finished = false) {
+        await setDoc(doc(db, DEVICES_COLL, deviceFingerprint), {
+            deviceId: deviceFingerprint,
+            studentId: studentId,
+            examFinished: finished,
+            firstAccessAt: new Date().toISOString()
+        });
+    }
+
+    function renderStartScreen() {
+        document.getElementById("app").innerHTML = `
+            <div class="card">
+                <div class="header">
+                    <h1>📚 أ/إسماعيل عماد</h1>
+                    <p>مهندس برمجة - متخصص في الفيزياء والكيمياء وعلوم الفضاء</p>
+                </div>
+                <input type="text" id="studentNameInput" placeholder="أدخل اسمك بالكامل">
+                <button id="startExamBtn">🚀 بدء الامتحان</button>
+                <div class="progress" style="margin-top:20px;">⏱️ مدة الامتحان: 20 دقيقة | عدد الأسئلة: ${questionsData.length}</div>
+            </div>
+        `;
+        document.getElementById("startExamBtn").addEventListener("click", async () => {
+            const name = document.getElementById("studentNameInput").value.trim();
+            if(!name) { alert("يرجى إدخال اسمك"); return; }
+            
+            // التحقق من الجهاز أولاً
+            const deviceCheck = await checkDeviceAllowed();
+            if(!deviceCheck.allowed) {
+                document.getElementById("app").innerHTML = `
+                    <div class="card">
+                        <div class="error-msg">${deviceCheck.message}</div>
+                        <button id="backBtn">🔙 العودة</button>
+                    </div>
+                `;
+                document.getElementById("backBtn").addEventListener("click", () => renderStartScreen());
+                return;
+            }
+            
+            studentName = name;
+            
+            // إذا كان جهاز موجود ولم ينته الامتحان -> استكمال
+            if(deviceCheck.existingDevice) {
+                const existingStudentId = deviceCheck.existingStudentId;
+                const studentDoc = await getDoc(doc(db, STUDENTS_COLL, existingStudentId));
+                if(studentDoc.exists()) {
+                    const data = studentDoc.data();
+                    studentId = existingStudentId;
+                    studentName = data.name;
+                    answers = data.answers || {};
+                    const progressSnap = await getDoc(doc(db, PROGRESS_COLL, studentId));
+                    if(progressSnap.exists()) {
+                        currentIndex = progressSnap.data().currentIndex || 0;
+                        timeLeft = progressSnap.data().timeLeft || (20*60);
+                        if(currentIndex >= 11) subscribeShown = true;
+                    }
+                    renderQuestion(currentIndex);
+                    startTimer();
+                    return;
+                }
+            }
+            
+            // جهاز جديد أو لم يسبق له الامتحان
+            const studentRef = await addDoc(collection(db, STUDENTS_COLL), {
+                name: studentName,
+                startTime: new Date().toISOString(),
+                answers: {},
+                finished: false,
+                deviceId: deviceFingerprint
+            });
+            studentId = studentRef.id;
+            
+            await registerDevice(studentId, false);
+            
+            await setDoc(doc(db, PROGRESS_COLL, studentId), {
+                currentIndex: 0,
+                answers: {},
+                timeLeft: timeLeft
+            });
+            
+            renderQuestion(0);
+            startTimer();
+        });
+    }
+
+    function startTimer() {
+        if(timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(async () => {
+            if(examFinished) return;
+            if(timeLeft <= 0) {
+                if(timerInterval) clearInterval(timerInterval);
+                alert("⏰ انتهى الوقت! يمكنك إكمال الامتحان لكنك خارج المسابقة.");
+            } else {
+                timeLeft--;
+                const timerEl = document.getElementById("timerDisplay");
+                if(timerEl) {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    timerEl.innerText = `${minutes}:${seconds.toString().padStart(2,'0')}`;
+                }
+                if(timeLeft % 10 === 0 && studentId) {
+                    await updateDoc(doc(db, PROGRESS_COLL, studentId), { timeLeft: timeLeft });
+                }
+            }
+        }, 1000);
+    }
+
+    async function renderQuestion(index) {
+        if(index >= questionsData.length) {
+            finishExam();
+            return;
+        }
+        
+        if(!subscribeShown && index === 11 && !examFinished) {
+            subscribeShown = true;
+            renderSubscribeScreen();
+            return;
+        }
+        
+        const q = questionsData[index];
+        const savedAnswer = answers[index] || "";
+        
+        document.getElementById("app").innerHTML = `
+            <div class="card">
+                <div class="timer">⏱️ الوقت المتبقي: <span id="timerDisplay">${Math.floor(timeLeft/60)}:${(timeLeft%60).toString().padStart(2,'0')}</span></div>
+                <div class="progress">السؤال ${index+1} من ${questionsData.length}</div>
+                <div class="question-text">${q.text}</div>
+                ${q.options.map((opt, i) => `
+                    <div class="option ${savedAnswer === opt ? 'selected' : ''}" data-opt="${opt}">
+                        ${String.fromCharCode(65+i)} - ${opt}
+                    </div>
+                `).join('')}
+                <button id="nextBtn">${index === questionsData.length-1 ? '🏁 إنهاء الامتحان' : '➡️ التالي'}</button>
+            </div>
+        `;
+        
+        document.querySelectorAll(".option").forEach(opt => {
+            opt.addEventListener("click", () => {
+                const selected = opt.getAttribute("data-opt");
+                answers[index] = selected;
+                saveProgress();
+                renderQuestion(index);
+            });
+        });
+        
+        document.getElementById("nextBtn").addEventListener("click", () => {
+            if(!answers[index]) {
+                alert("الرجاء اختيار إجابة قبل الانتقال");
+                return;
+            }
+            currentIndex = index + 1;
+            renderQuestion(currentIndex);
+        });
+    }
+    
+    function renderSubscribeScreen() {
+        document.getElementById("app").innerHTML = `
+            <div class="card youtube-card">
+                <div class="header">
+                    <h1>🎬 أزيك يا ${studentName}!</h1>
+                    <p>معاك مستر إسماعيل عماد - مهندس برمجة ومتخصص في الفيزياء والكيمياء وعلوم الفضاء</p>
+                </div>
+                <p style="color:white; margin:20px 0;">❤️ قبل ما تكمل باقي الأسئلة، ممكن تشترك في قناتي عشان تتشجع وتكمل! 🚀</p>
+                <a href="https://youtube.com/@ismall-i1m?si=xbHYVRSX-qHgruzO" target="_blank">
+                    <button class="youtube-btn">🔴 اشترك في القناة</button>
+                </a>
+                <button id="continueExamBtn" class="skip-btn">📝 كمل الامتحان من هنا</button>
+                <p style="color:#94a3b8; font-size:12px; margin-top:16px;">الاشتراك اختياري، مش هجبرك ❤️</p>
+            </div>
+        `;
+        document.getElementById("continueExamBtn").addEventListener("click", () => {
+            renderQuestion(11);
+        });
+    }
+    
+    async function saveProgress() {
+        if(studentId) {
+            await updateDoc(doc(db, PROGRESS_COLL, studentId), {
+                answers: answers,
+                currentIndex: currentIndex
+            });
+            await updateDoc(doc(db, STUDENTS_COLL, studentId), {
+                answers: answers
+            });
+        }
+    }
+    
+    async function finishExam() {
+        if(examFinished) return;
+        examFinished = true;
+        if(timerInterval) clearInterval(timerInterval);
+        
+        let correctCount = 0;
+        const mistakes = [];
+        for(let i = 0; i < questionsData.length; i++) {
+            const userAnswer = answers[i];
+            const correct = questionsData[i].correct;
+            if(userAnswer === correct) {
+                correctCount++;
+            } else {
+                mistakes.push({
+                    question: questionsData[i].text,
+                    userAnswer: userAnswer || "لم يجب",
+                    correctAnswer: correct
+                });
+            }
+        }
+        const score = Math.round((correctCount / questionsData.length) * 100);
+        const endTime = new Date().toISOString();
+        
+        await updateDoc(doc(db, STUDENTS_COLL, studentId), {
+            finished: true,
+            endTime: endTime,
+            score: score,
+            correctCount: correctCount,
+            mistakes: mistakes
+        });
+        
+        // تحديث الجهاز بأن الامتحان انتهى
+        await registerDevice(studentId, true);
+        
+        let mistakesHtml = "";
+        mistakes.forEach(m => {
+            mistakesHtml += `
+                <div class="mistake-item">
+                    <strong>❌ ${m.question}</strong><br>
+                    إجابتك: ${m.userAnswer}<br>
+                    <span class="correct-answer">✅ الإجابة الصحيحة: ${m.correctAnswer}</span>
+                </div>
+            `;
+        });
+        
+        document.getElementById("app").innerHTML = `
+            <div class="card result-card">
+                <div class="header">
+                    <h1>🎉 ${studentName}</h1>
+                    <p>انتهيت من الامتحان!</p>
+                </div>
+                <div class="result-score">${score}%</div>
+                <p>✅ الإجابات الصحيحة: ${correctCount} من ${questionsData.length}</p>
+                <p>🕒 وقت الانتهاء: ${new Date(endTime).toLocaleString('ar')}</p>
+                ${mistakes.length > 0 ? `<hr><h3 style="color:#facc15;">📝 الأخطاء:</h3>${mistakesHtml}` : '<p style="color:#4ade80;">🎉 ممتاز! لا توجد أخطاء</p>'}
+                <button id="screenshotBtn" style="margin-top:20px;">📸 اضغط هنا وأرسل الصورة للمستر إسماعيل عماد</button>
+            </div>
+        `;
+        document.getElementById("screenshotBtn").addEventListener("click", () => {
+            alert("📸 يمكنك الآن أخذ لقطة للشاشة وإرسالها للمستر إسماعيل عماد 01122104596");
+        });
+    }
+    
+    await initDatabase();
+    renderStartScreen();
+</script>
+</body>
+</html>
