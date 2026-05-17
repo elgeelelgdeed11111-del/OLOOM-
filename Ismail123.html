@@ -5,7 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>الامتحان التفاعلي | أ/إسماعيل عماد</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/dist/fp.min.js"></script>
+    <!-- تحميل FingerprintJS من مصادر متعددة للاحتياط -->
+    <script>
+        function loadFingerprintJS() {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/dist/fp.min.js';
+                script.onload = () => resolve();
+                script.onerror = () => {
+                    // محاولة مصدر بديل
+                    const script2 = document.createElement('script');
+                    script2.src = 'https://unpkg.com/@fingerprintjs/fingerprintjs@4/dist/fp.min.js';
+                    script2.onload = () => resolve();
+                    script2.onerror = () => reject(new Error('فشل تحميل مكتبة البصمة'));
+                    document.head.appendChild(script2);
+                };
+                document.head.appendChild(script);
+            });
+        }
+    </script>
     <style>
         * {
             margin: 0;
@@ -154,10 +172,15 @@
         .error-msg {
             background: #991b1b;
             color: #fecaca;
-            padding: 12px;
-            border-radius: 16px;
+            padding: 16px;
+            border-radius: 20px;
             text-align: center;
-            margin-top: 16px;
+            margin-bottom: 20px;
+        }
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+            color: #facc15;
         }
         @media (max-width: 500px) {
             .card { padding: 18px; }
@@ -166,7 +189,12 @@
     </style>
 </head>
 <body>
-<div class="container" id="app"></div>
+<div class="container" id="app">
+    <div class="loading-spinner">
+        <div>⏳ جاري تحميل المنصة...</div>
+        <div style="font-size:12px; margin-top:10px;">يرجى الانتظار قليلاً</div>
+    </div>
+</div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
@@ -185,13 +213,11 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // ========== كوليكشنات جديدة ==========
     const STUDENTS_COLL = "exam_students_v3";
     const QUESTIONS_COLL = "exam_questions_v3";
     const PROGRESS_COLL = "exam_progress_v3";
-    const DEVICES_COLL = "exam_devices_v3"; // لتخزين بصمات الأجهزة
+    const DEVICES_COLL = "exam_devices_v3";
 
-    // ========== الأسئلة ==========
     const questionsData = [
         { text: "يتركب الكروموسوم كيميائياً من حمض نووي يسمى ...... مرتبط مع البروتين.", options: ["RNA", "DNA", "ATP", "النيوكليوتيدة"], correct: "DNA" },
         { text: "المواد الكيميائية التي تضبط وتنظم معظم وظائف وأنشطة أعضاء الجسم تُعرف بـ:", options: ["الإنزيمات", "الفيتامينات", "الهرمونات", "اللعاب"], correct: "الهرمونات" },
@@ -220,6 +246,7 @@
     let examFinished = false;
     let subscribeShown = false;
     let deviceFingerprint = null;
+    let starting = false;
 
     async function initDatabase() {
         const questionsRef = collection(db, QUESTIONS_COLL);
@@ -237,6 +264,7 @@
     }
 
     async function getFingerprint() {
+        await loadFingerprintJS();
         const fp = await FingerprintJS.load();
         const result = await fp.get();
         return result.visitorId;
@@ -246,7 +274,6 @@
         const fingerprint = await getFingerprint();
         deviceFingerprint = fingerprint;
         
-        // البحث عن هذا الجهاز في قاعدة البيانات
         const devicesRef = collection(db, DEVICES_COLL);
         const q = query(devicesRef, where("deviceId", "==", fingerprint));
         const snapshot = await getDocs(q);
@@ -256,7 +283,6 @@
             if(deviceData.examFinished === true) {
                 return { allowed: false, message: "❌ هذا الجهاز سبق له أداء الامتحان. لا يمكنك الدخول مرة أخرى." };
             } else {
-                // جهاز موجود لكن الامتحان لم ينته -> استكمال
                 return { allowed: true, existingDevice: snapshot.docs[0], existingStudentId: deviceData.studentId };
             }
         }
@@ -284,66 +310,87 @@
                 <div class="progress" style="margin-top:20px;">⏱️ مدة الامتحان: 20 دقيقة | عدد الأسئلة: ${questionsData.length}</div>
             </div>
         `;
-        document.getElementById("startExamBtn").addEventListener("click", async () => {
-            const name = document.getElementById("studentNameInput").value.trim();
-            if(!name) { alert("يرجى إدخال اسمك"); return; }
+        
+        const startBtn = document.getElementById("startExamBtn");
+        const nameInput = document.getElementById("studentNameInput");
+        
+        startBtn.addEventListener("click", async () => {
+            if(starting) return;
+            starting = true;
+            startBtn.disabled = true;
+            startBtn.textContent = "⏳ جاري التحقق...";
             
-            // التحقق من الجهاز أولاً
-            const deviceCheck = await checkDeviceAllowed();
-            if(!deviceCheck.allowed) {
-                document.getElementById("app").innerHTML = `
-                    <div class="card">
-                        <div class="error-msg">${deviceCheck.message}</div>
-                        <button id="backBtn">🔙 العودة</button>
-                    </div>
-                `;
-                document.getElementById("backBtn").addEventListener("click", () => renderStartScreen());
+            const name = nameInput.value.trim();
+            if(!name) {
+                alert("يرجى إدخال اسمك");
+                startBtn.disabled = false;
+                startBtn.textContent = "🚀 بدء الامتحان";
+                starting = false;
                 return;
             }
             
-            studentName = name;
-            
-            // إذا كان جهاز موجود ولم ينته الامتحان -> استكمال
-            if(deviceCheck.existingDevice) {
-                const existingStudentId = deviceCheck.existingStudentId;
-                const studentDoc = await getDoc(doc(db, STUDENTS_COLL, existingStudentId));
-                if(studentDoc.exists()) {
-                    const data = studentDoc.data();
-                    studentId = existingStudentId;
-                    studentName = data.name;
-                    answers = data.answers || {};
-                    const progressSnap = await getDoc(doc(db, PROGRESS_COLL, studentId));
-                    if(progressSnap.exists()) {
-                        currentIndex = progressSnap.data().currentIndex || 0;
-                        timeLeft = progressSnap.data().timeLeft || (20*60);
-                        if(currentIndex >= 11) subscribeShown = true;
-                    }
-                    renderQuestion(currentIndex);
-                    startTimer();
+            try {
+                const deviceCheck = await checkDeviceAllowed();
+                if(!deviceCheck.allowed) {
+                    document.getElementById("app").innerHTML = `
+                        <div class="card">
+                            <div class="error-msg">${deviceCheck.message}</div>
+                            <button id="backBtn">🔙 العودة</button>
+                        </div>
+                    `;
+                    document.getElementById("backBtn").addEventListener("click", () => renderStartScreen());
                     return;
                 }
+                
+                studentName = name;
+                
+                if(deviceCheck.existingDevice) {
+                    const existingStudentId = deviceCheck.existingStudentId;
+                    const studentDoc = await getDoc(doc(db, STUDENTS_COLL, existingStudentId));
+                    if(studentDoc.exists()) {
+                        const data = studentDoc.data();
+                        studentId = existingStudentId;
+                        studentName = data.name;
+                        answers = data.answers || {};
+                        const progressSnap = await getDoc(doc(db, PROGRESS_COLL, studentId));
+                        if(progressSnap.exists()) {
+                            currentIndex = progressSnap.data().currentIndex || 0;
+                            timeLeft = progressSnap.data().timeLeft || (20*60);
+                            if(currentIndex >= 11) subscribeShown = true;
+                        }
+                        renderQuestion(currentIndex);
+                        startTimer();
+                        return;
+                    }
+                }
+                
+                const studentRef = await addDoc(collection(db, STUDENTS_COLL), {
+                    name: studentName,
+                    startTime: new Date().toISOString(),
+                    answers: {},
+                    finished: false,
+                    deviceId: deviceFingerprint
+                });
+                studentId = studentRef.id;
+                
+                await registerDevice(studentId, false);
+                
+                await setDoc(doc(db, PROGRESS_COLL, studentId), {
+                    currentIndex: 0,
+                    answers: {},
+                    timeLeft: timeLeft
+                });
+                
+                renderQuestion(0);
+                startTimer();
+            } catch(error) {
+                console.error(error);
+                alert("حدث خطأ تقني، يرجى تحديث الصفحة والمحاولة مرة أخرى");
+                renderStartScreen();
+            } finally {
+                startBtn.disabled = false;
+                starting = false;
             }
-            
-            // جهاز جديد أو لم يسبق له الامتحان
-            const studentRef = await addDoc(collection(db, STUDENTS_COLL), {
-                name: studentName,
-                startTime: new Date().toISOString(),
-                answers: {},
-                finished: false,
-                deviceId: deviceFingerprint
-            });
-            studentId = studentRef.id;
-            
-            await registerDevice(studentId, false);
-            
-            await setDoc(doc(db, PROGRESS_COLL, studentId), {
-                currentIndex: 0,
-                answers: {},
-                timeLeft: timeLeft
-            });
-            
-            renderQuestion(0);
-            startTimer();
         });
     }
 
@@ -407,13 +454,19 @@
             });
         });
         
-        document.getElementById("nextBtn").addEventListener("click", () => {
+        const nextBtn = document.getElementById("nextBtn");
+        nextBtn.addEventListener("click", async () => {
             if(!answers[index]) {
                 alert("الرجاء اختيار إجابة قبل الانتقال");
                 return;
             }
+            nextBtn.disabled = true;
+            nextBtn.textContent = "⏳ جاري الحفظ...";
             currentIndex = index + 1;
+            await saveProgress();
             renderQuestion(currentIndex);
+            nextBtn.disabled = false;
+            nextBtn.textContent = index === questionsData.length-1 ? '🏁 إنهاء الامتحان' : '➡️ التالي';
         });
     }
     
@@ -480,7 +533,6 @@
             mistakes: mistakes
         });
         
-        // تحديث الجهاز بأن الامتحان انتهى
         await registerDevice(studentId, true);
         
         let mistakesHtml = "";
@@ -512,8 +564,19 @@
         });
     }
     
-    await initDatabase();
-    renderStartScreen();
+    // بدء التطبيق
+    try {
+        await initDatabase();
+        renderStartScreen();
+    } catch(error) {
+        console.error(error);
+        document.getElementById("app").innerHTML = `
+            <div class="card">
+                <div class="error-msg">⚠️ حدث خطأ في الاتصال بقاعدة البيانات</div>
+                <button onclick="location.reload()">🔄 إعادة تحميل الصفحة</button>
+            </div>
+        `;
+    }
 </script>
 </body>
 </html>
