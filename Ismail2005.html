@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>استطلاع رأي |  
- | أ. إسماعيل عماد</title>
+    <title>استطلاع رأي | أ. إسماعيل عماد</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* ألوان هادية: أخضر فاتح، أبيض، أسود، أحمر خفيف */
@@ -215,7 +214,6 @@
 
     <div class="max-w-2xl mx-auto w-full">
         
-        <!-- الخطوة 1: رسالة الترحيب بنفس النص الأصلي (بدون تأثيرات حركية، بدون أمثلة) -->
         <div x-show="currentStep === 1" class="survey-card p-6 md:p-8 text-center">
             <div class="text-7xl mb-4">🎯</div>
             <div class="message-bubble">
@@ -231,7 +229,6 @@
             </button>
         </div>
 
-        <!-- الخطوة 2: البيانات الشخصية (بدون أمثلة داخل الحقول) -->
         <div x-show="currentStep === 2" class="survey-card p-6 md:p-8">
             <div class="step-indicator">
                 <span class="step-dot completed"></span>
@@ -245,7 +242,6 @@
             </h2>
             
             <div class="space-y-5">
-                <!-- الاسم -->
                 <div>
                     <label class="block font-bold mb-2" style="color: var(--black)">
                         <i class="fas fa-user ml-1"></i> الاسم الكامل *
@@ -256,7 +252,6 @@
                     <p class="error-message" :class="{'show': errors.name}" x-text="errors.name"></p>
                 </div>
                 
-                <!-- رقم الهاتف -->
                 <div>
                     <label class="block font-bold mb-2" style="color: var(--black)">
                         <i class="fas fa-phone ml-1"></i> رقم الهاتف *
@@ -268,7 +263,6 @@
                     <p class="error-message" :class="{'show': errors.phone}" x-text="errors.phone"></p>
                 </div>
                 
-                <!-- المرحلة الدراسية -->
                 <div>
                     <label class="block font-bold mb-2" style="color: var(--black)">
                         <i class="fas fa-graduation-cap ml-1"></i> المرحلة الدراسية *
@@ -299,7 +293,6 @@
             </div>
         </div>
 
-        <!-- الخطوة 3: الأسئلة (تم إزالة الأمثلة من placeholder والنصوص) -->
         <div x-show="currentStep === 3" class="survey-card p-6 md:p-8">
             <div class="step-indicator">
                 <span class="step-dot completed"></span>
@@ -313,7 +306,6 @@
             </h2>
             
             <div class="space-y-7">
-                <!-- السؤال الأول -->
                 <div>
                     <label class="block font-bold mb-2" style="color: var(--black)">
                         <span class="inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-bold ml-2" style="background: var(--primary-main);">1</span>
@@ -323,7 +315,6 @@
                     <p class="error-message" :class="{'show': errors.question1}" x-text="errors.question1"></p>
                 </div>
                 
-                <!-- السؤال الثاني -->
                 <div>
                     <label class="block font-bold mb-2" style="color: var(--black)">
                         <span class="inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-bold ml-2" style="background: var(--primary-main);">2</span>
@@ -333,7 +324,6 @@
                     <p class="error-message" :class="{'show': errors.question2}" x-text="errors.question2"></p>
                 </div>
                 
-                <!-- السؤال الثالث -->
                 <div>
                     <label class="block font-bold mb-2" style="color: var(--black)">
                         <span class="inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-bold ml-2" style="background: var(--primary-main);">3</span>
@@ -342,7 +332,6 @@
                     <textarea x-model="formData.question3" class="textarea-field" placeholder="اكتب رأيك هنا (اختياري)"></textarea>
                 </div>
                 
-                <!-- السؤال الرابع: الاختيارات المتعددة -->
                 <div>
                     <label class="block font-bold mb-3" style="color: var(--black)">
                         <span class="inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-bold ml-2" style="background: var(--primary-main);">4</span>
@@ -405,7 +394,6 @@
             </div>
         </div>
 
-        <!-- الخطوة 4: رسالة الشكر (بنفس النص الأصلي الجذاب) -->
         <div x-show="currentStep === 4" class="survey-card p-6 md:p-8 text-center">
             <div class="step-indicator">
                 <span class="step-dot completed"></span>
@@ -490,30 +478,40 @@
                 ],
                 
                 init() {
-                    this.generateDeviceFingerprint();
+                    this.getOrGenerateUUID();
                     this.checkPreviousSubmission();
                 },
                 
-                generateDeviceFingerprint() {
-                    const data = {
-                        ua: navigator.userAgent,
-                        lang: navigator.language,
-                        screen: `${screen.width}x${screen.height}`,
-                        ts: Date.now()
-                    };
-                    this.deviceFingerprint = btoa(JSON.stringify(data)).substring(0, 100);
+                getOrGenerateUUID() {
+                    // التحقق من وجود معرف فريد محلي مخزن في متصفح المستخدم
+                    let uuid = localStorage.getItem('survey_user_uuid');
+                    if (!uuid) {
+                        // توليد معرف عشوائي مستقر وآمن بدون مشاكل الرموز لتجنب الـ Error الخفي
+                        uuid = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 15);
+                        localStorage.setItem('survey_user_uuid', uuid);
+                    }
+                    this.deviceFingerprint = uuid;
                 },
                 
                 async checkPreviousSubmission() {
+                    // فحص دفاعي أولى وسريع وموفر للاستعلامات من الـ LocalStorage مباشرة
+                    if (localStorage.getItem('survey_submitted_successfully') === 'true') {
+                        this.currentStep = 4;
+                        return;
+                    }
+
                     if (!db) return;
                     try {
                         const q = query(collection(db, 'StudentSurveys_V1'), where('deviceFingerprint', '==', this.deviceFingerprint));
                         const snap = await getDocs(q);
                         if (!snap.empty) {
+                            localStorage.setItem('survey_submitted_successfully', 'true');
                             this.currentStep = 4;
                             this.showToast('شكراً لك، سبق وشاركت في الاستطلاع');
                         }
-                    } catch(e) {}
+                    } catch(e) {
+                        console.error("Error checking submission:", e);
+                    }
                 },
                 
                 showToast(msg) {
@@ -611,7 +609,7 @@
                             offline.push(payload);
                             localStorage.setItem('offline_surveys', JSON.stringify(offline));
                         }
-                        localStorage.setItem(`survey_submitted_${this.deviceFingerprint}`, 'true');
+                        localStorage.setItem('survey_submitted_successfully', 'true');
                         this.currentStep = 4;
                         this.showToast('🎉 تم إرسال استطلاع الرأي بنجاح! شكراً لمشاركتك');
                     } catch(err) {
