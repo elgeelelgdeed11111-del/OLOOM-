@@ -10,14 +10,11 @@
     <style>
         :root {
             --primary-light: #DCFCE7;
-            --primary-soft: #86EFAC;
             --primary-main: #22C55E;
             --white: #FFFFFF;
             --black: #1F2937;
-            --gray-bg: #F9FAFB;
             --border-light: #E5E7EB;
             --red-error: #EF4444;
-            --text-muted: #4B5563;
         }
         
         * { font-family: 'Cairo', sans-serif; }
@@ -43,6 +40,7 @@
             padding: 12px 28px;
             transition: background 0.2s ease;
             border: none;
+            cursor: pointer;
         }
         
         .btn-primary:hover { background: #16A34A; }
@@ -54,6 +52,7 @@
             font-weight: 600;
             border-radius: 24px;
             padding: 12px 24px;
+            cursor: pointer;
         }
         
         .btn-secondary:hover { background: #E5E7EB; }
@@ -111,6 +110,7 @@
             height: 18px;
             accent-color: var(--primary-main);
             margin: 0;
+            pointer-events: none;
         }
         
         .step-indicator {
@@ -196,6 +196,7 @@
 
     <div class="max-w-2xl mx-auto w-full">
         
+        <!-- الخطوة 1: ترحيب -->
         <div x-show="currentStep === 1" class="survey-card p-6 md:p-8 text-center">
             <div class="text-7xl mb-4">🎯</div>
             <div class="message-bubble">
@@ -211,6 +212,7 @@
             </button>
         </div>
 
+        <!-- الخطوة 2: البيانات الشخصية -->
         <div x-show="currentStep === 2" class="survey-card p-6 md:p-8">
             <div class="step-indicator">
                 <span class="step-dot completed"></span>
@@ -275,6 +277,7 @@
             </div>
         </div>
 
+        <!-- الخطوة 3: الأسئلة -->
         <div x-show="currentStep === 3" class="survey-card p-6 md:p-8">
             <div class="step-indicator">
                 <span class="step-dot completed"></span>
@@ -322,7 +325,7 @@
                     <div class="checkbox-group">
                         <template x-for="tool in toolsList" :key="tool.id">
                             <label class="checkbox-item" :class="{'selected': formData.tools.includes(tool.id)}" @click="toggleTool(tool.id)">
-                                <input type="checkbox" :checked="formData.tools.includes(tool.id)" readonly>
+                                <input type="checkbox" :checked="formData.tools.includes(tool.id)">
                                 <span x-text="tool.name"></span>
                             </label>
                         </template>
@@ -342,6 +345,7 @@
             </div>
         </div>
 
+        <!-- الخطوة 4: شكراً -->
         <div x-show="currentStep === 4" class="survey-card p-6 md:p-8 text-center">
             <div class="step-indicator">
                 <span class="step-dot completed"></span>
@@ -389,7 +393,7 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('surveyApp', () => ({
                 loading: false,
-                currentStep: 1,
+                currentStep: 1,  // يبدأ دائماً من الخطوة 1 لأي مستخدم جديد
                 submitting: false,
                 toastMessage: '',
                 
@@ -425,30 +429,11 @@
                     { id: 'notifications', name: '🔔 نظام تذكير وإشعارات ذكي' }
                 ],
                 
-                async init() {
-                    await this.checkPreviousSubmission();
-                },
-                
-                async checkPreviousSubmission() {
-                    // أولاً: التحقق من localStorage
-                    const alreadySubmitted = localStorage.getItem('survey_submitted_successfully');
-                    if (alreadySubmitted === 'true') {
-                        this.currentStep = 4;
-                        return;
-                    }
-                    
-                    if (!db) return;
-                    
-                    this.loading = true;
-                    try {
-                        // لا نتحقق من أي شيء هنا - نترك المستخدم يكمل الاستطلاع
-                        // سنتحقق فقط عند الإرسال الفعلي
-                        console.log("✅ جاهز لاستقبال استطلاع جديد");
-                    } catch(e) {
-                        console.error("Error:", e);
-                    } finally {
-                        this.loading = false;
-                    }
+                // لا يوجد أي تحقق مسبق - المستخدم يرى الاستطلاع دائماً
+                init() {
+                    console.log("✅ التطبيق جاهز - المستخدم يرى الاستطلاع");
+                    // حذف أي بيانات خاطئة من localStorage
+                    localStorage.removeItem('survey_submitted_successfully');
                 },
                 
                 showToast(msg) {
@@ -527,9 +512,10 @@
                     if (this.submitting) return;
                     this.submitting = true;
                     
-                    // 🔍 التحقق النهائي: هل هذا المستخدم سبق له الإرسال بنفس رقم الهاتف؟
+                    // التحقق من Firebase: هل هذا الرقم موجود مسبقاً؟
                     if (db) {
                         try {
+                            this.loading = true;
                             const q = query(
                                 collection(db, 'StudentSurveys_V1'), 
                                 where('phone', '==', this.formData.phone.trim())
@@ -537,13 +523,15 @@
                             const querySnapshot = await getDocs(q);
                             
                             if (!querySnapshot.empty) {
-                                // تم العثور على استطلاع سابق بنفس رقم الهاتف
-                                this.showToast('⚠️ عذراً! تم تسجيل استطلاع مسبقاً بهذا الرقم');
+                                this.showToast('⚠️ عذراً! هذا الرقم مسجل مسبقاً في الاستطلاع');
                                 this.submitting = false;
+                                this.loading = false;
                                 return;
                             }
                         } catch(e) {
                             console.error("Error checking existing survey:", e);
+                        } finally {
+                            this.loading = false;
                         }
                     }
                     
@@ -571,15 +559,10 @@
                             await addDoc(collection(db, 'StudentSurveys_V1'), payload);
                             console.log("✅ تم حفظ الاستطلاع في Firebase");
                         } else {
-                            // Offline fallback
                             const offline = JSON.parse(localStorage.getItem('offline_surveys') || '[]');
                             offline.push(payload);
                             localStorage.setItem('offline_surveys', JSON.stringify(offline));
                         }
-                        
-                        // حفظ علم الإرسال للمستخدم الحالي فقط
-                        localStorage.setItem('survey_submitted_successfully', 'true');
-                        localStorage.setItem('survey_user_phone', this.formData.phone);
                         
                         this.currentStep = 4;
                         this.showToast('🎉 تم إرسال استطلاع الرأي بنجاح! شكراً لمشاركتك');
