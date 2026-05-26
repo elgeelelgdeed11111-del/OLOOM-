@@ -5,25 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>استطلاع رأي | أ. إسماعيل عماد</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* ألوان هادية: أخضر فاتح، أبيض، أسود، أحمر خفيف */
         :root {
-            --primary-light: #DCFCE7;      /* أخضر فاتح جداً للخلفيات */
-            --primary-soft: #86EFAC;       /* أخضر ناعم */
-            --primary-main: #22C55E;       /* أخضر أساسي */
+            --primary-light: #DCFCE7;
+            --primary-soft: #86EFAC;
+            --primary-main: #22C55E;
             --white: #FFFFFF;
-            --black: #1F2937;              /* أسود مائل للرمادي الداكن */
+            --black: #1F2937;
             --gray-bg: #F9FAFB;
             --border-light: #E5E7EB;
-            --red-error: #EF4444;           /* أحمر للتنبيهات */
+            --red-error: #EF4444;
             --text-muted: #4B5563;
         }
         
-        * { 
-            font-family: 'Cairo', sans-serif; 
-        }
+        * { font-family: 'Cairo', sans-serif; }
         
         body { 
             background: var(--primary-light);
@@ -36,10 +33,8 @@
             border-radius: 28px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border-light);
-            transition: none;
         }
         
-        /* أزرار بسيطة */
         .btn-primary {
             background: var(--primary-main);
             color: white;
@@ -50,9 +45,8 @@
             border: none;
         }
         
-        .btn-primary:hover {
-            background: #16A34A;
-        }
+        .btn-primary:hover { background: #16A34A; }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
         
         .btn-secondary {
             background: #F3F4F6;
@@ -60,12 +54,9 @@
             font-weight: 600;
             border-radius: 24px;
             padding: 12px 24px;
-            transition: background 0.2s ease;
         }
         
-        .btn-secondary:hover {
-            background: #E5E7EB;
-        }
+        .btn-secondary:hover { background: #E5E7EB; }
         
         .input-field, .select-field, .textarea-field {
             background: var(--white);
@@ -83,12 +74,8 @@
             box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
         }
         
-        .textarea-field {
-            min-height: 110px;
-            resize: vertical;
-        }
+        .textarea-field { min-height: 110px; resize: vertical; }
         
-        /* مجموعة الخيارات */
         .checkbox-group {
             display: flex;
             flex-wrap: wrap;
@@ -126,7 +113,6 @@
             margin: 0;
         }
         
-        /* مؤشر الخطوات بسيط */
         .step-indicator {
             display: flex;
             justify-content: center;
@@ -139,7 +125,6 @@
             height: 8px;
             border-radius: 50%;
             background: #D1D5DB;
-            transition: none;
         }
         
         .step-dot.active {
@@ -160,9 +145,7 @@
             display: none;
         }
         
-        .error-message.show {
-            display: block;
-        }
+        .error-message.show { display: block; }
         
         .toast {
             position: fixed;
@@ -190,7 +173,6 @@
         
         [x-cloak] { display: none !important; }
         
-        /* رسالة ترحيب بنفس النص الأصلي ولكن بألوان هادية */
         .message-bubble {
             background: var(--primary-light);
             color: var(--black);
@@ -338,46 +320,12 @@
                         إيه الأدوات اللي ممكن تفيدك ويقدر أ/ إسماعيل يبرمجها ليك تساعدك في المذاكرة؟ <span class="text-sm text-gray-500">(تقدر تختار أكتر من حاجة)</span>
                     </label>
                     <div class="checkbox-group">
-                        <label class="checkbox-item" :class="{'selected': formData.tools.includes('ai')}" @click="toggleTool('ai')">
-                            <input type="checkbox" :checked="formData.tools.includes('ai')" readonly>
-                            <span>🤖 أدوات ذكاء اصطناعي عبقرية (ب اشتراك رمزي)</span>
-                        </label>
-                        <label class="checkbox-item" :class="{'selected': formData.tools.includes('organization')}" @click="toggleTool('organization')">
-                            <input type="checkbox" :checked="formData.tools.includes('organization')" readonly>
-                            <span>📅 أدوات تنظيم المذاكرة والوقت</span>
-                        </label>
-                        <label class="checkbox-item" :class="{'selected': formData.tools.includes('videos')}" @click="toggleTool('videos')">
-                            <input type="checkbox" :checked="formData.tools.includes('videos')" readonly>
-                            <span>🎥 منصة فيديوهات تفاعلية</span>
-                        </label>
-                        <label class="checkbox-item" :class="{'selected': formData.tools.includes('quiz')}" @click="toggleTool('quiz')">
-                            <input type="checkbox" :checked="formData.tools.includes('quiz')" readonly>
-                            <span>📝 نظام اختبارات وتمارين ذكي</span>
-                        </label>
-                        <label class="checkbox-item" :class="{'selected': formData.tools.includes('chat')}" @click="toggleTool('chat')">
-                            <input type="checkbox" :checked="formData.tools.includes('chat')" readonly>
-                            <span>💬 شات تفاعلي للمساعدة الفورية</span>
-                        </label>
-                        <label class="checkbox-item" :class="{'selected': formData.tools.includes('gamification')}" @click="toggleTool('gamification')">
-                            <input type="checkbox" :checked="formData.tools.includes('gamification')" readonly>
-                            <span>🎮 ألعاب تعليمية تفاعلية</span>
-                        </label>
-                        <label class="checkbox-item" :class="{'selected': formData.tools.includes('summaries')}" @click="toggleTool('summaries')">
-                            <input type="checkbox" :checked="formData.tools.includes('summaries')" readonly>
-                            <span>📚 تلخيصات ذكية للمناهج</span>
-                        </label>
-                        <label class="checkbox-item" :class="{'selected': formData.tools.includes('tracking')}" @click="toggleTool('tracking')">
-                            <input type="checkbox" :checked="formData.tools.includes('tracking')" readonly>
-                            <span>📊 نظام متابعة التقدم الشخصي</span>
-                        </label>
-                        <label class="checkbox-item" :class="{'selected': formData.tools.includes('community')}" @click="toggleTool('community')">
-                            <input type="checkbox" :checked="formData.tools.includes('community')" readonly>
-                            <span>👥 مجتمع دراسي تفاعلي</span>
-                        </label>
-                        <label class="checkbox-item" :class="{'selected': formData.tools.includes('notifications')}" @click="toggleTool('notifications')">
-                            <input type="checkbox" :checked="formData.tools.includes('notifications')" readonly>
-                            <span>🔔 نظام تذكير وإشعارات ذكي</span>
-                        </label>
+                        <template x-for="tool in toolsList" :key="tool.id">
+                            <label class="checkbox-item" :class="{'selected': formData.tools.includes(tool.id)}" @click="toggleTool(tool.id)">
+                                <input type="checkbox" :checked="formData.tools.includes(tool.id)" readonly>
+                                <span x-text="tool.name"></span>
+                            </label>
+                        </template>
                     </div>
                     <p class="error-message" :class="{'show': errors.tools}" x-text="errors.tools"></p>
                 </div>
@@ -415,7 +363,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
         import { 
-            getFirestore, doc, setDoc, collection, query, where, getDocs 
+            getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
         const FIREBASE_CONFIG = {
@@ -433,8 +381,9 @@
         try {
             const app = initializeApp(FIREBASE_CONFIG);
             db = getFirestore(app);
+            console.log("✅ Firebase connected");
         } catch(e) {
-            console.warn("Firebase connection issue");
+            console.warn("Firebase connection issue:", e);
         }
 
         document.addEventListener('alpine:init', () => {
@@ -443,7 +392,6 @@
                 currentStep: 1,
                 submitting: false,
                 toastMessage: '',
-                deviceFingerprint: '',
                 
                 formData: {
                     name: '',
@@ -465,8 +413,8 @@
                 },
                 
                 toolsList: [
-                    { id: 'ai', name: '🤖 أدوات ذكاء اصطناعي عبقرية' },
-                    { id: 'organization', name: '📅 أدوات تنظيم المذاكرة' },
+                    { id: 'ai', name: '🤖 أدوات ذكاء اصطناعي عبقرية (ب اشتراك رمزي)' },
+                    { id: 'organization', name: '📅 أدوات تنظيم المذاكرة والوقت' },
                     { id: 'videos', name: '🎥 منصة فيديوهات تفاعلية' },
                     { id: 'quiz', name: '📝 نظام اختبارات وتمارين ذكي' },
                     { id: 'chat', name: '💬 شات تفاعلي للمساعدة الفورية' },
@@ -477,40 +425,29 @@
                     { id: 'notifications', name: '🔔 نظام تذكير وإشعارات ذكي' }
                 ],
                 
-                init() {
-                    this.getOrGenerateUUID();
-                    this.checkPreviousSubmission();
-                },
-                
-                getOrGenerateUUID() {
-                    // التحقق من وجود معرف فريد محلي مخزن في متصفح المستخدم
-                    let uuid = localStorage.getItem('survey_user_uuid');
-                    if (!uuid) {
-                        // توليد معرف عشوائي مستقر وآمن بدون مشاكل الرموز لتجنب الـ Error الخفي
-                        uuid = 'user_' + Date.now() + '_' + Math.random().toString(36).substring(2, 15);
-                        localStorage.setItem('survey_user_uuid', uuid);
-                    }
-                    this.deviceFingerprint = uuid;
+                async init() {
+                    await this.checkPreviousSubmission();
                 },
                 
                 async checkPreviousSubmission() {
-                    // فحص دفاعي أولى وسريع وموفر للاستعلامات من الـ LocalStorage مباشرة
-                    if (localStorage.getItem('survey_submitted_successfully') === 'true') {
+                    // أولاً: التحقق من localStorage
+                    const alreadySubmitted = localStorage.getItem('survey_submitted_successfully');
+                    if (alreadySubmitted === 'true') {
                         this.currentStep = 4;
                         return;
                     }
-
+                    
                     if (!db) return;
+                    
+                    this.loading = true;
                     try {
-                        const q = query(collection(db, 'StudentSurveys_V1'), where('deviceFingerprint', '==', this.deviceFingerprint));
-                        const snap = await getDocs(q);
-                        if (!snap.empty) {
-                            localStorage.setItem('survey_submitted_successfully', 'true');
-                            this.currentStep = 4;
-                            this.showToast('شكراً لك، سبق وشاركت في الاستطلاع');
-                        }
+                        // لا نتحقق من أي شيء هنا - نترك المستخدم يكمل الاستطلاع
+                        // سنتحقق فقط عند الإرسال الفعلي
+                        console.log("✅ جاهز لاستقبال استطلاع جديد");
                     } catch(e) {
-                        console.error("Error checking submission:", e);
+                        console.error("Error:", e);
+                    } finally {
+                        this.loading = false;
                     }
                 },
                 
@@ -519,8 +456,13 @@
                     setTimeout(() => { this.toastMessage = ''; }, 3500);
                 },
                 
-                nextStep() { if (this.currentStep < 4) this.currentStep++; },
-                prevStep() { if (this.currentStep > 1) this.currentStep--; },
+                nextStep() { 
+                    if (this.currentStep < 4) this.currentStep++; 
+                },
+                
+                prevStep() { 
+                    if (this.currentStep > 1) this.currentStep--; 
+                },
                 
                 validatePhone() {
                     if (this.formData.phone.length > 0 && this.formData.phone.length !== 11) {
@@ -553,7 +495,11 @@
                 
                 toggleTool(toolId) {
                     const idx = this.formData.tools.indexOf(toolId);
-                    idx === -1 ? this.formData.tools.push(toolId) : this.formData.tools.splice(idx, 1);
+                    if (idx === -1) {
+                        this.formData.tools.push(toolId);
+                    } else {
+                        this.formData.tools.splice(idx, 1);
+                    }
                 },
                 
                 validateAndSubmit() {
@@ -581,6 +527,26 @@
                     if (this.submitting) return;
                     this.submitting = true;
                     
+                    // 🔍 التحقق النهائي: هل هذا المستخدم سبق له الإرسال بنفس رقم الهاتف؟
+                    if (db) {
+                        try {
+                            const q = query(
+                                collection(db, 'StudentSurveys_V1'), 
+                                where('phone', '==', this.formData.phone.trim())
+                            );
+                            const querySnapshot = await getDocs(q);
+                            
+                            if (!querySnapshot.empty) {
+                                // تم العثور على استطلاع سابق بنفس رقم الهاتف
+                                this.showToast('⚠️ عذراً! تم تسجيل استطلاع مسبقاً بهذا الرقم');
+                                this.submitting = false;
+                                return;
+                            }
+                        } catch(e) {
+                            console.error("Error checking existing survey:", e);
+                        }
+                    }
+                    
                     const toolsNames = this.formData.tools.map(id => {
                         const t = this.toolsList.find(tool => tool.id === id);
                         return t ? t.name : id;
@@ -588,32 +554,38 @@
                     
                     const payload = {
                         name: this.formData.name.trim(),
-                        phone: this.formData.phone,
+                        phone: this.formData.phone.trim(),
                         grade: this.formData.grade,
                         question1: this.formData.question1.trim(),
                         question2: this.formData.question2.trim(),
                         question3: this.formData.question3.trim(),
                         tools: this.formData.tools,
                         toolsNames: toolsNames,
-                        deviceFingerprint: this.deviceFingerprint,
                         submittedAt: new Date().toISOString(),
+                        timestamp: serverTimestamp(),
                         userAgent: navigator.userAgent
                     };
                     
                     try {
                         if (db) {
-                            const docId = `survey_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
-                            await setDoc(doc(db, 'StudentSurveys_V1', docId), payload);
+                            await addDoc(collection(db, 'StudentSurveys_V1'), payload);
+                            console.log("✅ تم حفظ الاستطلاع في Firebase");
                         } else {
+                            // Offline fallback
                             const offline = JSON.parse(localStorage.getItem('offline_surveys') || '[]');
                             offline.push(payload);
                             localStorage.setItem('offline_surveys', JSON.stringify(offline));
                         }
+                        
+                        // حفظ علم الإرسال للمستخدم الحالي فقط
                         localStorage.setItem('survey_submitted_successfully', 'true');
+                        localStorage.setItem('survey_user_phone', this.formData.phone);
+                        
                         this.currentStep = 4;
                         this.showToast('🎉 تم إرسال استطلاع الرأي بنجاح! شكراً لمشاركتك');
+                        
                     } catch(err) {
-                        console.error(err);
+                        console.error("❌ خطأ في الإرسال:", err);
                         this.showToast('❌ حدث خطأ أثناء الإرسال. حاول مرة أخرى');
                     } finally {
                         this.submitting = false;
