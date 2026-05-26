@@ -110,7 +110,7 @@
             height: 18px;
             accent-color: var(--primary-main);
             margin: 0;
-            pointer-events: none;
+            cursor: pointer;
         }
         
         .step-indicator {
@@ -324,8 +324,10 @@
                     </label>
                     <div class="checkbox-group">
                         <template x-for="tool in toolsList" :key="tool.id">
-                            <label class="checkbox-item" :class="{'selected': formData.tools.includes(tool.id)}" @click="toggleTool(tool.id)">
-                                <input type="checkbox" :checked="formData.tools.includes(tool.id)">
+                            <label class="checkbox-item" :class="{'selected': formData.tools.includes(tool.id)}">
+                                <input type="checkbox" 
+                                       :checked="formData.tools.includes(tool.id)"
+                                       @click.stop="toggleTool(tool.id)">
                                 <span x-text="tool.name"></span>
                             </label>
                         </template>
@@ -393,7 +395,7 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('surveyApp', () => ({
                 loading: false,
-                currentStep: 1,  // يبدأ دائماً من الخطوة 1 لأي مستخدم جديد
+                currentStep: 1,
                 submitting: false,
                 toastMessage: '',
                 
@@ -429,10 +431,8 @@
                     { id: 'notifications', name: '🔔 نظام تذكير وإشعارات ذكي' }
                 ],
                 
-                // لا يوجد أي تحقق مسبق - المستخدم يرى الاستطلاع دائماً
                 init() {
-                    console.log("✅ التطبيق جاهز - المستخدم يرى الاستطلاع");
-                    // حذف أي بيانات خاطئة من localStorage
+                    console.log("✅ التطبيق جاهز");
                     localStorage.removeItem('survey_submitted_successfully');
                 },
                 
@@ -512,7 +512,6 @@
                     if (this.submitting) return;
                     this.submitting = true;
                     
-                    // التحقق من Firebase: هل هذا الرقم موجود مسبقاً؟
                     if (db) {
                         try {
                             this.loading = true;
