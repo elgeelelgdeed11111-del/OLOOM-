@@ -200,7 +200,7 @@
 
     <div class="max-w-2xl mx-auto w-full">
         
-        <!-- الخطوة 1: ترحيب - تظهر دائماً -->
+‎        <!-- الخطوة 1: ترحيب - تظهر دائماً -->
         <div x-show="currentStep === 1" class="survey-card p-6 md:p-8 text-center">
             <div class="text-7xl mb-4">🎯</div>
             <div class="message-bubble">
@@ -216,7 +216,7 @@
             </button>
         </div>
 
-        <!-- الخطوة 2: البيانات الشخصية -->
+‎        <!-- الخطوة 2: البيانات الشخصية -->
         <div x-show="currentStep === 2" class="survey-card p-6 md:p-8">
             <div class="step-indicator">
                 <span class="step-dot completed"></span>
@@ -226,7 +226,7 @@
             </div>
             <h2 class="text-2xl font-black text-center mb-6" style="color: var(--black)">
                 <i class="fas fa-user-edit ml-2" style="color: var(--primary-main)"></i>
-                بياناتك الشخصية
+‎                بياناتك الشخصية
             </h2>
             
             <div class="space-y-5">
@@ -276,12 +276,12 @@
                     <i class="fas fa-arrow-right ml-1"></i> السابق
                 </button>
                 <button @click="validateAndProceed" class="btn-primary">
-                    التالي <i class="fas fa-arrow-left mr-1"></i>
+‎                    التالي <i class="fas fa-arrow-left mr-1"></i>
                 </button>
             </div>
         </div>
 
-        <!-- الخطوة 3: الأسئلة -->
+‎        <!-- الخطوة 3: الأسئلة -->
         <div x-show="currentStep === 3" class="survey-card p-6 md:p-8">
             <div class="step-indicator">
                 <span class="step-dot completed"></span>
@@ -291,14 +291,14 @@
             </div>
             <h2 class="text-2xl font-black text-center mb-6" style="color: var(--black)">
                 <i class="fas fa-question-circle ml-2" style="color: var(--primary-main)"></i>
-                أسئلة الاستطلاع
+‎                أسئلة الاستطلاع
             </h2>
             
             <div class="space-y-7">
                 <div>
                     <label class="block font-bold mb-2" style="color: var(--black)">
                         <span class="inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-bold ml-2" style="background: var(--primary-main);">1</span>
-                        إيه أكتر حاجة صعبة بتواجهك في دراستك في أي مادة؟
+‎                        إيه أكتر حاجة صعبة بتواجهك في دراستك في أي مادة؟
                     </label>
                     <textarea x-model="formData.question1" class="textarea-field" placeholder="اكتب إجابتك هنا"></textarea>
                     <p class="error-message" :class="{'show': errors.question1}" x-text="errors.question1"></p>
@@ -307,7 +307,7 @@
                 <div>
                     <label class="block font-bold mb-2" style="color: var(--black)">
                         <span class="inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-bold ml-2" style="background: var(--primary-main);">2</span>
-                        إيه الحاجة اللي لو اتوفرت ليك تخليك أفضل في مذاكرتك وفهمك؟
+‎                        إيه الحاجة اللي لو اتوفرت ليك تخليك أفضل في مذاكرتك وفهمك؟
                     </label>
                     <textarea x-model="formData.question2" class="textarea-field" placeholder="اكتب إجابتك هنا"></textarea>
                     <p class="error-message" :class="{'show': errors.question2}" x-text="errors.question2"></p>
@@ -316,7 +316,7 @@
                 <div>
                     <label class="block font-bold mb-2" style="color: var(--black)">
                         <span class="inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-bold ml-2" style="background: var(--primary-main);">3</span>
-                        لو اتعاملت مع شرحي في أي مادة (علوم أو برمجة)، شايف إيه اللي ناقص أو إيه محتاج يحصل عشان نكون أفضل؟
+‎                        لو اتعاملت مع شرحي في أي مادة (علوم أو برمجة)، شايف إيه اللي ناقص أو إيه محتاج يحصل عشان نكون أفضل؟
                     </label>
                     <textarea x-model="formData.question3" class="textarea-field" placeholder="اكتب رأيك هنا (اختياري)"></textarea>
                 </div>
@@ -324,7 +324,7 @@
                 <div>
                     <label class="block font-bold mb-3" style="color: var(--black)">
                         <span class="inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-bold ml-2" style="background: var(--primary-main);">4</span>
-                        إيه الأدوات اللي ممكن تفيدك ويقدر أ/ إسماعيل يبرمجها ليك تساعدك في المذاكرة؟ <span class="text-sm text-gray-500">(تقدر تختار أكتر من حاجة)</span>
+‎                        إيه الأدوات اللي ممكن تفيدك ويقدر أ/ إسماعيل يبرمجها ليك تساعدك في المذاكرة؟ <span class="text-sm text-gray-500">(تقدر تختار أكتر من حاجة)</span>
                     </label>
                     <div class="checkbox-group">
                         <template x-for="tool in toolsList" :key="tool.id">
@@ -351,7 +351,7 @@
             </div>
         </div>
 
-        <!-- الخطوة 4: شكراً -->
+‎        <!-- الخطوة 4: شكراً -->
         <div x-show="currentStep === 4" class="survey-card p-6 md:p-8 text-center">
             <div class="step-indicator">
                 <span class="step-dot completed"></span>
@@ -455,7 +455,7 @@
                 },
                 
                 resetForm() {
-                    // إعادة تعيين النموذج للخطوة 1
+‎                    // إعادة تعيين النموذج للخطوة 1
                     this.currentStep = 1;
                     this.formData = {
                         name: '',
